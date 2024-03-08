@@ -23,18 +23,26 @@ pub fn save_wav32(file:Wave32, pathstring:&str) {
 }
 
 
-/// loads an analysis file.
+/// loads a MIDI file.
 /// Takes an absolute path string as an input.
-/// returns a tuple containing the bytes
+/// returns an smf struct.
 
-
-pub fn import_analysis_file<'a>(pathstring:&str, bytes: &'a mut Vec<u8>, smf: &mut Smf<'a>) {
-
-
+pub fn import_midi(pathstring:&str) -> Smf<'static> {
 
     // Load bytes into a buffer
-    *bytes = fs::read(pathstring).unwrap();
+    let bytes = fs::read(pathstring).unwrap();
 
     // Parse bytes in a separate step
-    *smf = Smf::parse(bytes).unwrap();
+    let smf = Smf::parse(&bytes).unwrap();
+
+    return smf.make_static(); //not ideal? idk.
 }
+
+/// saves to a midi file
+/// Takes an absolute path string as an input.
+
+pub fn save_midi(file:Smf, pathstring:&str) {
+
+    file.save(pathstring).unwrap();
+}
+
