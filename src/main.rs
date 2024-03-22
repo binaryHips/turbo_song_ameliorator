@@ -1,21 +1,21 @@
 mod file_import;
 mod analyser;
 use fundsp::hacker32::*;
+use pitch_detection::*;
+use std::time::{Duration, Instant};
 
 
-fn convert(b: Vec<f32>) -> Vec<f64> {
-    b.into_iter().map(f64).collect()
-}
 
 fn main() {
-    let wav:Wave32 =  file_import::import_wav32("../assets/sound examples/amelioratorOfficialSoundtrack.wav");
+    let wav:Wave32 =  file_import::import_wav32("./assets/sound examples/amelioratorOfficialSoundtrack.wav");
 
-    let samplerate = wav.sample_rate();
-    let signal32 = *(wav.channel(0));
+    let start = Instant::now();
+    let (notes, times) = analyser::tonal_analysis::get_fundamental_notes(&wav, 0.2);
+    let duration = start.elapsed();
+    for i in 0..(notes).len(){
 
-    let signal = convert(signal32);
+        println!("{}, {:.1}s", notes[i], times[i]);
 
-    analyser::tonal_analysis::get_fundamental_note(signal, samplerate);
-
-    
+    }
+    println!("Time elapsed in expensive_function() is: {:?}", duration);
 }
