@@ -54,7 +54,7 @@ pub fn get_fundamental_notes(wav: &Wave32, interval_seconds:f64) -> (Vec<String>
     let mut notes:Vec<String> = Vec::new();
     let mut times: Vec<f64> = Vec::new();
 
-    let signal32: Vec<f32> = &wav.channel(0);
+    let signal32: Vec<f32> = wav.channel(0).clone();
 
     let signal = convert(signal32);
 

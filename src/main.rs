@@ -7,12 +7,13 @@ use std::time::{Duration, Instant};
 
 
 fn main() {
-    let mut node = lowpass_hz(1000.0, 0.5);
+    let wav:Wave32 =  file_import::import_wav32("./assets/sound examples/EDAC 60.wav");
 
-    print!("Filter: lowpass_hz(1000.0, 0.5)\n\n");
+    let mut node = lowpass_hz(500.0, 1.0) | lowpass_hz(500.0, 1.0);
+    let res = wav.filter(10.0, &mut node);
 
-    // The display method prints an ASCII oscilloscope and other information about the node.
-    print!("{}", node.display());
+    file_import::save_wav32(&res, "./assets/sound examples/EDAC_60_LOWPASSED.wav");
+
 }
 
 
