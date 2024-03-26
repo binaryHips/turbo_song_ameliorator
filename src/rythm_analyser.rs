@@ -7,24 +7,55 @@ pub fn find_wave_bpm(wave : &Wave32) -> i32
 {
     let now = Instant::now();
     println!("start");
+    const min : i32 = 30;
+    const max : i32 = 240;
     let mut bpm = 0;
     let mut correlation = 0.0;
     let sr = wave.sample_rate();
     let len = wave.len() as i32;    // nombre de sample
     // Optimisation : remplacer le for par un parcours de liste auquel on enlève les multiples des bpm trop faible
-    for test in 30..241             // le bpm qu'on test
+    let mut tab = [0 ; (max-min+1) as usize];
+    for i in min..max+1
     {
-        let st = 60*(sr as i32)/test;    // nombre de sample par temps
-        let mut sum = 0.0;
-        for sample in st..len        
+        tab[(i-min) as usize] += i;
+    }
+    for test in min..max+1             // le bpm qu'on test
+    {
+        if tab[(test-min) as usize] != 0
         {
-            // Les calculs des samples sont arrondies à l'inférieurs mais comme on les parcours un par un ensuite, le décallage ne se cumule pas
-            sum += wave.at(0 as usize, sample as usize)*wave.at(0 as usize, (sample-st) as usize);
-        }
-        if sum > correlation
-        {
-            bpm = test;
-            correlation = sum;
+            let st = 60*(sr as i32)/test;    // nombre de sample par temps
+            let mut sum = 0.0;
+            for sample in st..len        
+            {
+                // Les calculs des samples sont arrondies à l'inférieurs mais comme on les parcours un par un ensuite, le décallage ne se cumule pas
+                sum += wave.at(0 as usize, sample as usize)*wave.at(0 as usize, (sample-st) as usize);
+            }
+            if sum > correlation
+            {
+                let mut i = 2;
+                while bpm*i <= max
+                {
+                    if (((bpm*i) as f64)/(test as f64)) as i32 != bpm*i/test
+                    {
+                        tab[((bpm*i)-min) as usize] == 0;
+                    }
+                    i += 1;
+                }
+                bpm = test;
+                correlation = sum;
+            }
+            else
+            {
+                let mut i = 2;
+                while test*i <= max
+                {
+                    if (((test*i) as f64)/(bpm as f64)) as i32 != test*i/bpm
+                    {
+                        tab[((test*i)-min) as usize] == 0;
+                    }
+                    i += 1;
+                }
+            }
         }
     }
     let now2 = Instant::now();
