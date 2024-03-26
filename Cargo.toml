@@ -10,3 +10,4 @@ fundsp = "0.16.0" #for general dsp
 cpal = "0.15.2" #for realtime audio stream (?)
 #midir = "0.9.1" #for realtime midi processing
 midly = "0.5.3" #for offline midi processing
+pitch-detection = "0.3.0" #for pitch detection algorithm (remove if we end up doing our own!)
