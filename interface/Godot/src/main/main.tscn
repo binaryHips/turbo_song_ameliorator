@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://b14m1ke4kt8lw"]
+
+[node name="main" type="Node2D"]
+
+[node name="interface" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 1152.0
+offset_bottom = 648.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
