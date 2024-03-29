@@ -59,6 +59,6 @@ fn test_lowpass(){
 
 fn test_rhythm()
 {
-    let wav:Wave32 =  file_import::import_wav32("./assets/sound examples/amelioratorOfficialSoundtrack.wav");
+    let wav:Wave32 = file_import::import_wav32("./assets/sound examples/amelioratorOfficialSoundtrack.wav");
     analyser::rhythm_analysis::test(&wav);
 }
