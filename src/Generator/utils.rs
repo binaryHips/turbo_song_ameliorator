@@ -1,7 +1,7 @@
 mod utils;
 use std::fmt;
 
-enum Notes_name {A, Ad, B, C, Cd, D, Dd, E, F, Fd, G, Gd}
+enum Notes_name {A, As, B, C, Cs, D, Ds, E, F, Fs, G, Gs} // s for sharp
 
 const notes_str:Vec = vec!["A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"];
 
