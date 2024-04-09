@@ -6,7 +6,7 @@ use std::time::{Duration, Instant};
 pub fn find_wave_bpm(wave : &Wave32) -> i32
 {
     let now = Instant::now();
-    println!("start");
+    //println!("start");
     let mut bpm = 0;
     let mut correlation = 0.0;
     let sr = wave.sample_rate();
@@ -28,7 +28,7 @@ pub fn find_wave_bpm(wave : &Wave32) -> i32
         }
     }
     let now2 = Instant::now();
-    println!("{:?}", now2.duration_since(now));
+    //println!("{:?}", now2.duration_since(now));
     return bpm;
 }
 
@@ -39,7 +39,7 @@ pub fn find_wave_bpm(wave : &Wave32) -> i32
 pub fn find_wave_first_sample(wave : &Wave32, bpm : i32) -> i32
 {
     let now = Instant::now();
-    println!("start");
+    //println!("start");
     let mut first = 0;
     let mut correlation = 0.0;
     let sr = wave.sample_rate();
@@ -59,7 +59,7 @@ pub fn find_wave_first_sample(wave : &Wave32, bpm : i32) -> i32
         }
     }
     let now2 = Instant::now();
-    println!("{:?}", now2.duration_since(now));
+    //println!("{:?}", now2.duration_since(now));
     return first;
 }
 
@@ -69,5 +69,5 @@ pub fn test(wave : &Wave32)
 {
     let bpm = find_wave_bpm(wave);
     let first = find_wave_first_sample(wave, bpm);
-    println!("{bpm}, {first}");
+    //println!("{bpm}, {first}");
 }
