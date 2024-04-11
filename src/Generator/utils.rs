@@ -31,4 +31,33 @@ impl Note {
         return 21 + note + (octave * 12);
     }
 
+    fn quantize_to_scale(&self, scale:Scale){
+        let mut closest:int32 = 99999;
+        for n in scale.notes{
+
+            if abs(n - self.note) <= closest{
+
+                n = closest;
+            }
+            
+        self.note = closest;
+        }
+
+    }
+
+}
+
+
+struct Scale{
+
+    notes:Vec<Notes_name>,
+    root:Notes_name,
+}
+
+impl Scale{
+
+    fn get_relative(&self, n:int32) -> Notes_name{
+        return (n + self.root) % 12;
+
+    }
 }
