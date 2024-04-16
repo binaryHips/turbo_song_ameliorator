@@ -6,7 +6,7 @@ use std::time::{Duration, Instant};
 pub fn find_wave_bpm(wave : &Wave32) -> i32
 {
     let now = Instant::now();
-    println!("start");
+    // println!("start");
     const MIN : i32 = 20;           // BPM testé
     const MAX : i32 = 240;          // BPM testé
     const SEC_ANALYSED : f64 = 20.0;
@@ -30,7 +30,7 @@ pub fn find_wave_bpm(wave : &Wave32) -> i32
             if sum > correlation
             {
                 if correlation < sum/2.0        {remove_multiples(MAX, MIN, bpm, test, &mut tab);}
-                println!("{} remplace {} car {} > {}", test, bpm, sum, correlation);
+                // println!("{} remplace {} car {} > {}", test, bpm, sum, correlation);
                 bpm = test;
                 correlation = sum;                
             }
@@ -38,20 +38,20 @@ pub fn find_wave_bpm(wave : &Wave32) -> i32
         }
     }
     let now2 = Instant::now();
-    println!("{:?}", now2.duration_since(now));
-    println!("{:?}", tab);
+    // println!("{:?}", now2.duration_since(now));
+    // println!("{:?}", tab);
     return bpm;
 }
 
 
-/// Trouve le premier sample du début du premier temps d'une musique
+/// Trouve l'instant du premier temps d'une musique
 /// à partir d'un fichier wave et du bpm supposé de la musique
-/// Retourne le numéro du sample en un entier sur 32 bits
-pub fn find_wave_first_sample(wave : &Wave32, bpm : i32) -> i32
+/// Retourne l'instant en seconde dans un flottant sur 64 bits
+pub fn find_wave_first_instant(wave : &Wave32, bpm : i32) -> f64
 {
     let now = Instant::now();
-    println!("start");
-    let mut first = 0;
+    // println!("start");
+    let mut first_sample = 0;
     let mut correlation = 0.0;
     let sr = wave.sample_rate();
     let st = 60*(sr as i32)/bpm;    // nombre de sample par temps
@@ -63,13 +63,14 @@ pub fn find_wave_first_sample(wave : &Wave32, bpm : i32) -> i32
         {sum += wave.at(0 as usize, (temp*st+sample) as usize)*wave.at(0 as usize, ((temp-1)*st+sample) as usize);}
         if sum > correlation
         {
-            first = sample;
+            first_sample = sample;
             correlation = sum;
         }
     }
+    let first_instant : f64 = (first_sample as f64)/sr ;
     let now2 = Instant::now();
-    println!("{:?}", now2.duration_since(now));
-    return first;
+    // println!("{:?}", now2.duration_since(now));
+    return first_instant;
 }
 
 fn remove_multiples(max_bpm : i32, min_bpm : i32, bad_bpm : i32, good_bpm : i32, values : &mut[i32])
@@ -82,7 +83,7 @@ fn remove_multiples(max_bpm : i32, min_bpm : i32, bad_bpm : i32, good_bpm : i32,
         if (bad_bpm*i)%good_bpm != 0        // BPM multiple de bad mais pas de good
         {
             (*values)[((bad_bpm*i)-min_bpm) as usize] = 0;
-            println!("Enlevé: {} car multiple de {}, (comparé à {})", bad_bpm*i, bad_bpm, good_bpm);
+            // println!("Enlevé: {} car multiple de {}, (comparé à {})", bad_bpm*i, bad_bpm, good_bpm);
         }
         i += 1;
     }
@@ -93,6 +94,6 @@ fn remove_multiples(max_bpm : i32, min_bpm : i32, bad_bpm : i32, good_bpm : i32,
 pub fn test(wave : &Wave32)
 {
     let bpm = find_wave_bpm(wave);
-    let first = find_wave_first_sample(wave, bpm);
+    let first = find_wave_first_instant(wave, bpm);
     println!("{bpm}, {first}");
 }
