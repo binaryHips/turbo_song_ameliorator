@@ -24,18 +24,16 @@ pub fn save_wav32(file:Wave32, pathstring:&str) {
 
 
 /// loads a MIDI file.
-/// Takes an absolute path string as an input.
-/// returns an smf struct.
+/// Takes an absolute path string as an input, aswell as a mutable adress for bytes, and a mutable adress for the file
+/// lifetime fuckery makes it work. 
 
-pub fn import_midi(pathstring:&str) -> Smf<'static> {
+pub fn import_midi<'a>(pathstring:&str,bytes: &'a mut Vec<u8>, smf: &'a mut Smf<'a>) {
 
     // Load bytes into a buffer
-    let bytes = fs::read(pathstring).unwrap();
-
+    *bytes = fs::read(pathstring).unwrap();
     // Parse bytes in a separate step
-    let smf = Smf::parse(&bytes).unwrap();
+    *smf = Smf::parse(bytes).unwrap();
 
-    return smf.make_static(); //not ideal? idk.
 }
 
 /// saves to a midi file
