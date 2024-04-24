@@ -10,3 +10,5 @@ fundsp = "0.16.0" #for general dsp
 cpal = "0.15.2" #for realtime audio stream (?)
 #midir = "0.9.1" #for realtime midi processing
 midly = "0.5.3" #for offline midi processing
+num-traits = "0.2"
+num-derive = "0.2"
