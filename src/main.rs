@@ -13,7 +13,8 @@ use std::time::{Duration, Instant};
 
 
 fn main() {
-    test_pitch_detection()
+    test_pitch_detection();
+    test_rhythm();
 }
 
 
@@ -59,4 +60,11 @@ fn test_lowpass(){
     let res = wav.filter(10.0, &mut node);
 
     file_import::save_wav32(&res, "./assets/sound examples/EDAC_60_LOWPASSED.wav");
+}
+
+
+fn test_rhythm()
+{
+    let wav:Wave32 = file_import::import_wav32("./assets/sound examples/amelioratorOfficialSoundtrack.wav");
+    analyser::rhythm_analysis::test(&wav);
 }
