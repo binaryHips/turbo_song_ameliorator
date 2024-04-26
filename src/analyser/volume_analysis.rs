@@ -17,7 +17,7 @@ fn get_slice_volume_RMS(signal_slice: &[f32]) -> f32{
 }
 
 
-pub fn get_volumes_RMS(wav: &Wave32, interval_seconds:f64) -> Vec<f32> {
+pub fn get_volumes_RMS(wav: &Wave32, interval_seconds:f64) -> Vec<(f64, f32)> {
 
     const WINDOW_SIZE_SECONDS:f64 = 0.3; //.3s seems usual for RMS metering
 
@@ -26,7 +26,7 @@ pub fn get_volumes_RMS(wav: &Wave32, interval_seconds:f64) -> Vec<f32> {
     let window_span:usize = (WINDOW_SIZE_SECONDS * samplerate/2.0) as usize;
 
 
-    let mut volumes: Vec<f32> = Vec::new();
+    let mut volumes: Vec<(f64, f32)> = Vec::new();
 
 
     let signal: &Vec<f32> = &wav.channel(0);
@@ -37,7 +37,10 @@ pub fn get_volumes_RMS(wav: &Wave32, interval_seconds:f64) -> Vec<f32> {
         let signal_slice: &[f32] = &signal[(i-window_span)..(i+window_span)];
 
         volumes.push(
-            get_slice_volume_RMS(signal_slice)
+            (
+                (i as f64) / samplerate ,
+                get_slice_volume_RMS(signal_slice)
+            )
         );
     
 
