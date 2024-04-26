@@ -1,0 +1,104 @@
+[gd_scene load_steps=9 format=3 uid="uid://dxfo1vh2t8paa"]
+
+[ext_resource type="Script" path="res://src/ecran_pistes/tracks.gd" id="1_1u1v6"]
+[ext_resource type="Script" path="res://src/ecran_pistes/ecran_pistes.gd" id="1_5fjsj"]
+[ext_resource type="Script" path="res://src/ecran_pistes/MenuButtonFile.gd" id="1_pcdnp"]
+[ext_resource type="Script" path="res://src/ecran_pistes/bandeau acceuil.gd" id="2_tie4b"]
+[ext_resource type="Script" path="res://src/ecran_pistes/ColorRect.gd" id="3_6hol1"]
+[ext_resource type="Script" path="res://src/ecran_pistes/MenuButtonHelp.gd" id="5_kkf2l"]
+
+[sub_resource type="Gradient" id="Gradient_8uwnu"]
+colors = PackedColorArray(0.542764, 0.338439, 0.832741, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_srukk"]
+gradient = SubResource("Gradient_8uwnu")
+fill_from = Vector2(0.103448, 0.0948276)
+fill_to = Vector2(0.900862, 0.918103)
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_5fjsj")
+
+[node name="bandeau acceuil" type="Control" parent="."]
+layout_mode = 1
+anchor_right = 1.0
+anchor_bottom = 0.03
+offset_bottom = 0.32
+script = ExtResource("2_tie4b")
+
+[node name="ColorRect" type="ColorRect" parent="bandeau acceuil"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.364706, 0, 0.627451, 1)
+script = ExtResource("3_6hol1")
+
+[node name="MenuButtonFile" type="MenuButton" parent="bandeau acceuil/ColorRect"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.056
+anchor_bottom = 1.569
+offset_left = -4.0
+offset_top = -5.0
+offset_right = -1.512
+offset_bottom = -5.00344
+button_pressed = true
+text = "File"
+script = ExtResource("1_pcdnp")
+
+[node name="MenuButtonHelp" type="MenuButton" parent="bandeau acceuil/ColorRect"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.12
+anchor_bottom = 1.366
+offset_left = 70.0
+offset_top = -5.0
+offset_right = -1.24001
+offset_bottom = -0.992159
+button_pressed = true
+text = "Help"
+script = ExtResource("5_kkf2l")
+
+[node name="Control2" type="Control" parent="."]
+layout_mode = 1
+anchor_top = 0.03
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 0.559999
+offset_bottom = -1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TextureRect" type="TextureRect" parent="Control2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("GradientTexture2D_srukk")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_1u1v6")
+
+[node name="Button" type="Button" parent="Control2/VBoxContainer"]
+custom_minimum_size = Vector2(35, 20)
+layout_mode = 2
+size_flags_horizontal = 0
+text = "+"
+
+[connection signal="pressed" from="Control2/VBoxContainer/Button" to="Control2/VBoxContainer" method="_on_button_pressed"]
