@@ -9,7 +9,7 @@ const NOTES_STR:[&str; 12] = ["A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F
 
 ///A simple musical note.
 /// 
-struct Note{
+pub struct Note{
 
     note:NotesName,
     octave:u8,
@@ -26,11 +26,11 @@ impl fmt::Display for Note{
 impl Note {
 
 
-    fn to_midi(&self) -> u8{
+    pub fn to_midi(&self) -> u8{
         return (21 + self.note as usize + (self.octave as usize * 12)) as u8;
     }
 
-    fn quantize_to_scale(&mut self, scale:Scale){
+    pub fn quantize_to_scale(&mut self, scale:Scale){
         let mut closest:usize = 99999;
         for n in scale.notes{
             let d = (n as usize).abs_diff(self.note as usize);
@@ -53,7 +53,7 @@ struct Scale{
 }
 
 impl Scale{
-    fn get_relative(&self, n:i32) -> NotesName{
+    pub fn get_relative(&self, n:i32) -> NotesName{
         return FromPrimitive::from_i32((n + self.root as i32) % 12).unwrap();
     }
 }
