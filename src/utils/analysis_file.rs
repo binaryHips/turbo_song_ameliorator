@@ -1,10 +1,10 @@
-use midly;
+use midly::{self, Smf};
 
 
 
 pub fn add_note(file:&Smf, note:Note){
 
-    let note:midiMessage;
+    let note:midly::MidiMessage;
     
 }
 
