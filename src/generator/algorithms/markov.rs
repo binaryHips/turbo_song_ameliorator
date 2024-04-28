@@ -1,5 +1,5 @@
-use crate::src::utils;
-use midly::Smf;
+use crate::utils;
+use midly;
 use rand::Rng;
 
 fn markov(ana_file : &Smf, start_time : f64, end_time : f64) -> Vec<(Note, f64, f64)>
