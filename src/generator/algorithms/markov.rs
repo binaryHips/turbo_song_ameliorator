@@ -57,7 +57,7 @@ fn markov_rhythm(nbt : i32, precision : i32, tab : Vec<Vec<f64>>) -> Vec<f64>
         somme += i;
         list_rhythm.push((i as f64)/(precision as f64));
     }
-    if somme > nbt*precisionb {list_rhythm[list_rhythm.len()-1] -= ((somme-nbt*precision) as f64)/(precision as f64);}
+    if somme > nbt*precision {list_rhythm[list_rhythm.len()-1] -= ((somme-nbt*precision) as f64)/(precision as f64);}
     return list_rhythm;
 }
 

@@ -1,8 +1,9 @@
 use midly::*;
+use crate::utils::{*, notes::*};
 
 fn midi_generator(melody : &Vec<(Note, f64, f64)>, pathstring:&str)
 {
-    let mut mid : Smf = Smf::new(Header::new(SingleTrack,Timecode(Fps, u8)));
+    let mut mid : Smf = Smf::new(Header::new(Format::SingleTrack,Timecode(Fps, u8)));
     let mut track : Track;
     let list_event : Vec<(Note, f64, bool)> = make_list_event(&melody);     // (Note, timing, is_pressed) ordonned
     for event in list_event
@@ -11,7 +12,7 @@ fn midi_generator(melody : &Vec<(Note, f64, f64)>, pathstring:&str)
         track.push(fevent);
     }
     mid.tracks.push(track);
-    save_midi(&mid, &pathstring);
+    file_import::save_midi(&mid, &pathstring);
 }
 
 
@@ -50,8 +51,9 @@ fn make_list_event(&melody : &Vec<(Note, f64, f64)>) -> Vec<(Note, f64, bool)>
 
 fn make_fevent(event : &(Note, f64, bool)) -> TrackEvent
 {
-    if event[2] {let midi_message  : MidiMessage = (NoteOn(event[0].to_midi(), event[0].velocity));}
-    else {let midi_message  : MidiMessage = (NoteOff(event[0].to_midi(), event[0].velocity));}
+    let mut midi_message : MidiMessage;
+    if event[2] {midi_message  = (NoteOn(event[0].to_midi(), event[0].velocity));}
+    else {midi_message  = (NoteOff(event[0].to_midi(), event[0].velocity));}
     let track_event_kind : TrackEventKind = TrackEventKind::Midi(0, midi_message);  // {0; midi_message};
     
     let track_event = TrackEvent.new(, track_event_kind);
