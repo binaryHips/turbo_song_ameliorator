@@ -1,8 +1,8 @@
 use crate::src::utils;
-use midly;
+use midly::Smf;
 use rand::Rng;
 
-fn markov(ana_file : Smf, start_time:f64, end_time:f64) -> Vec<(Note, f64, f64)>
+fn markov(ana_file : &Smf, start_time : f64, end_time : f64) -> Vec<(Note, f64, f64)>
 {
     let rhythm_prob : Vec<Vec<f64>> = vec![vec![1/4,1/4,1/4,1/4],
                                            vec![1/4,1/4,1/4,1/4],
@@ -32,6 +32,7 @@ fn markov(ana_file : Smf, start_time:f64, end_time:f64) -> Vec<(Note, f64, f64)>
     let nbn : i32 = list_rhythm.len();      // nombre de notes
     let list_notes : Vec<Note> = markov_notes(nbn, &note_prob);
     let melody : Vec<(Note, f64, f64)> = construct_melody(list_rhythm, list_notes, start_temp);
+    scaling(&melody, &anafile);
     return melody;
 }
 
@@ -95,4 +96,10 @@ fn construct_melody(list_rhythm : Vec<f64>, list_notes : Vec<Note>, start_temp  
         instant += list_rhythm[i];
     }
     return melody;
+}
+
+
+fn scaling(melody : &mut Vec<(Note, f64, f64)>, anafile : &Smf)
+{
+    for song in melody {song[0].quantize_to_scale(get_scale(&anafile));}
 }
