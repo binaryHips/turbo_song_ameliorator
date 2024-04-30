@@ -1,13 +1,13 @@
-mod file_import; //helper functions for importing basic files
+
 mod utils; //utility functions. Contains notes definitions.
 
 mod analyser;
-
+mod generator;
 
 use fundsp::hacker32::*;
 use pitch_detection::*;
 use std::time::{Duration, Instant};
-
+use utils::file_import;
 
 
 fn main() {
