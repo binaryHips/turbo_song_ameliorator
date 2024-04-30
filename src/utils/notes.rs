@@ -3,7 +3,7 @@ use num_derive::FromPrimitive;
 use num_traits::FromPrimitive;
 
 #[derive(FromPrimitive, Copy, Clone)]
-enum NotesName {A, Ad, B, C, Cd, D, Dd, E, F, Fd, G, Gd}
+enum NoteNames {A, Ad, B, C, Cd, D, Dd, E, F, Fd, G, Gd}
 
 const NOTES_STR:[&str; 12] = ["A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"];
 
@@ -11,7 +11,7 @@ const NOTES_STR:[&str; 12] = ["A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F
 /// 
 pub struct Note{
 
-    note:NotesName,
+    note:NoteNames,
     octave:u8,
 }
 
@@ -48,12 +48,12 @@ impl Note {
 
 struct Scale{
 
-    notes:Vec<NotesName>,
-    root:NotesName,
+    notes:Vec<NoteNames>,
+    root:NoteNames,
 }
 
 impl Scale{
-    pub fn get_relative(&self, n:i32) -> NotesName{
+    pub fn get_relative(&self, n:i32) -> NoteNames{
         return FromPrimitive::from_i32((n + self.root as i32) % 12).unwrap();
     }
 }
