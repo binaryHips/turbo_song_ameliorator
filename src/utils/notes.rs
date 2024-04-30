@@ -13,7 +13,7 @@ const NOTES_STR:[&str; 12] = ["A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F
 /// 
 pub struct Note{
 
-    pub note:NotesName,
+    pub note:NoteNames,
     pub octave:u8,
     pub velocity:num::u7,
 }

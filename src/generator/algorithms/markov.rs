@@ -1,4 +1,4 @@
-use crate::src::utils;
+use crate::utils;
 use midly;
 use rand::Rng;
 
