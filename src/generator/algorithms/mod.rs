@@ -1,1 +1,1 @@
-pub mod markov;
+pub mod algorithms;
