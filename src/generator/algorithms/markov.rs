@@ -1,4 +1,4 @@
-use utils;
+use crate::src::utils;
 use midly;
 use rand::Rng;
 
@@ -22,8 +22,8 @@ fn markov(ana_file : Smf, start_time:f64, end_time:f64) -> Vec<(Note, f64, f64)>
                                          vec![1/13,1/13,1/13,1/13,1/13,1/13,1/13,1/13,1/13,1/13,1/13,1/13,1/13],
                                          vec![1/13,1/13,1/13,1/13,1/13,1/13,1/13,1/13,1/13,1/13,1/13,1/13,1/13],
                                          vec![1/13,1/13,1/13,1/13,1/13,1/13,1/13,1/13,1/13,1/13,1/13,1/13,1/13]];       // notes de A à G# + silence
-    let dureet : f64 = 1/anafile.bpm*60;        // durée d'un temp en seconde
-    let mut start_temp  : f64 = anafile.first_instant;
+    let dureet : f64 = 1.0/((get_bpm(&ana_file)*60) as f64);        // durée d'un temp en seconde
+    let mut start_temp  : f64 = get_first_instant(&anafile);
     while start_temp < start_time {start_temp += dureet;}
     let mut end_temp  : f64 = start_temp;
     while end_temp < end_time {end_temp += dureet;}
