@@ -1,4 +1,4 @@
-use midly::{self, Smf};
+use midly::{*, Smf};
 use crate::utils::*;
 use midly::*;
 
