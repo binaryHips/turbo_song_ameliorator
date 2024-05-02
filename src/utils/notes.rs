@@ -4,8 +4,7 @@ use num_traits::FromPrimitive;
 use midly::num;
 
 #[derive(FromPrimitive, Copy, Clone)]
-enum NoteNames {A, Ad, B, C, Cd, D, Dd, E, F, Fd, G, Gd}
-enum NoteNames {A, Ad, B, C, Cd, D, Dd, E, F, Fd, G, Gd}
+pub enum NoteNames {A, Ad, B, C, Cd, D, Dd, E, F, Fd, G, Gd}
 
 const NOTES_STR:[&str; 12] = ["A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"];
 
