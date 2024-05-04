@@ -46,13 +46,19 @@ impl Note {
 }
 
 
-struct Scale{
+#[derive(Clone)]
+pub struct Scale{
 
     notes:Vec<NoteNames>,
     root:NoteNames,
 }
 
 impl Scale{
+
+    pub fn new(notes:Vec<NoteNames>, root:NoteNames)-> Self{
+        Self {notes, root}
+    }
+
     pub fn get_relative(&self, n:i32) -> NoteNames{
         return FromPrimitive::from_i32((n + self.root as i32) % 12).unwrap();
     }

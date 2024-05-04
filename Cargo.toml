@@ -13,3 +13,4 @@ midly = "0.5.3" #for offline midi processing
 num-traits = "0.2"
 num-derive = "0.2"
 pitch-detection = "0.3.0" #for pitch detection algorithm (remove if we end up doing our own!)
+inner = "0.1.1"
