@@ -52,7 +52,7 @@ pub fn get_first_instant(file:&Smf) -> f64{
 
 ///gets scale from a 
 pub fn get_scale(file:&Smf) -> notes::Scale{
-    let mut NotesDebut = Vec::new();
+    let mut notes_in_scale = Vec::new();
     let liste = file.tracks[0];
     let mut time = 0;
     let mut debut = 0;
@@ -71,7 +71,7 @@ pub fn get_scale(file:&Smf) -> notes::Scale{
             let message = inner!(event, if  TrackEventKind::Midi, else {continue}).message;
 
             match message {
-                MidiMessage::NoteOn {key,vel} =>  NotesDebut.push(key),
+                MidiMessage::NoteOn {key,vel} =>  notes_in_scale.push(key),
                 MidiMessage::NoteOff {key,vel} => continue ,
                 _ => continue
             };
@@ -81,5 +81,5 @@ pub fn get_scale(file:&Smf) -> notes::Scale{
             break;
         }
     }
-    return notes::Scale::new(NotesDebut, NotesDebut[0]);
+    return notes::Scale::new(notes_in_scale, notes_in_scale[0]);
 }
