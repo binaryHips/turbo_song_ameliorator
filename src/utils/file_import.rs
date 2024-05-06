@@ -27,13 +27,18 @@ pub fn save_wav32(file:&Wave32, pathstring:&str) {
 /// loads a MIDI file.
 /// Takes an absolute path string as an input, aswell as a mutable adress for bytes, and a mutable adress for the file
 /// lifetime fuckery makes it work. 
-
-pub fn import_midi<'a>(pathstring:&str,bytes: &'a mut Vec<u8>, smf: &'a mut Smf<'a>) {
+struct Res<'a> {
+    b:Vec<u8>,
+    s:Smf<'a>
+}
+pub fn import_midi<'a>(pathstring:&str) -> Res{
 
     // Load bytes into a buffer
-    *bytes = fs::read(pathstring).unwrap();
-    // Parse bytes in a separate step
-    *smf = Smf::parse(bytes).unwrap();
+        let bytes:Vec<u8> = fs::read(pathstring).unwrap();
+        // Parse bytes in a separate step
+        let smf = Smf::parse(&bytes).unwrap();
+
+    return Res {b:bytes, s:smf};
 
 }
 
