@@ -24,6 +24,12 @@ impl fmt::Display for Note{
     }
 }
 
+impl From<i32> for NoteNames {
+    fn from(n: i32) -> Self {
+        FromPrimitive::from_i32((n) % 12).unwrap()
+    }
+}
+
 
 impl Note {
 
