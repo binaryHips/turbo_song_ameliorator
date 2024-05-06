@@ -1,18 +1,20 @@
 use std::fmt;
 use num_derive::FromPrimitive;    
 use num_traits::FromPrimitive;
+use midly::num;
 
 #[derive(FromPrimitive, Copy, Clone)]
-enum NoteNames {A, Ad, B, C, Cd, D, Dd, E, F, Fd, G, Gd}
+pub enum NoteNames {A, Ad, B, C, Cd, D, Dd, E, F, Fd, G, Gd, SILENCE}
 
-const NOTES_STR:[&str; 12] = ["A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"];
+const NOTES_STR:[&str; 13] = ["A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "silence"];
 
 ///A simple musical note.
 /// 
 pub struct Note{
 
-    note:NoteNames,
-    octave:u8,
+    pub note:NoteNames,
+    pub octave:u8,
+    pub velocity:num::u7,
 }
 
 impl fmt::Display for Note{
@@ -26,8 +28,8 @@ impl fmt::Display for Note{
 impl Note {
 
 
-    pub fn to_midi(&self) -> u8{
-        return (21 + self.note as usize + (self.octave as usize * 12)) as u8;
+    pub fn to_midi(&self) -> num::u7{
+        return num::u7::new((21 + self.note as usize + (self.octave as usize * 12)) as u8);
     }
 
     pub fn quantize_to_scale(&mut self, scale:Scale){
