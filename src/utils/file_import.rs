@@ -28,8 +28,8 @@ pub fn save_wav32(file:&Wave32, pathstring:&str) {
 /// Takes an absolute path string as an input, aswell as a mutable adress for bytes, and a mutable adress for the file
 /// lifetime fuckery makes it work. 
 struct Res<'a> {
-    b:Vec<u8>,
-    s:Smf<'a>
+    pub b:Vec<u8>,
+    pub s:Smf<'a>
 }
 pub fn import_midi<'a>(pathstring:&str) -> Res{
 

@@ -5,28 +5,34 @@ use anyhow::{anyhow, Result};
 
 
 #[derive(Clone)]
-struct AnalysisData{
+pub struct AnalysisData{
     bpm: usize,
     scale: notes::Scale,
+    start_time:f64,
     //scales: Vec< (f64, notes::Scale) >, // notes detected for each timestamp.
     //volumes: Vec< (f64, f32) > //volume
 }
 
 impl AnalysisData{
 
-    pub fn from_analysis_file(filename: &str) -> Result<Self>{
+    pub fn new(bpm: usize, scale: notes::Scale, start_time:f64) -> Self{
+        AnalysisData {bpm, scale, start_time}
+    }
 
-        let (bytes, smf) = file_import::import_midi(filename);
+    pub fn from_analysis_file(filename: &str) -> Result<Self>{
+        let res = file_import::import_midi(filename);
+        let smf = res.s;
 
         let bpm:usize = get_bpm(&smf);
         
         let scale:notes::Scale = get_scale(&smf);
 
-
+        let first_instant:f64 = get_first_instant(&smf);
 
         Ok(AnalysisData {
             bpm,
             scale,
+            start_time: first_instant,
         })
     }
 
