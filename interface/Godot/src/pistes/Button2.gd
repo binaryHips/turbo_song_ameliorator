@@ -12,8 +12,9 @@ func _process(delta):
 
 
 func _on_pressed():
-	var test = get_text( )
-	if test == "Mute" :
+	if text == "Mute" :
 		text = "Unmute"
+		get_parent().get_parent().muted = true
 	else :
 		text = "Mute"
+		get_parent().get_parent().muted = false

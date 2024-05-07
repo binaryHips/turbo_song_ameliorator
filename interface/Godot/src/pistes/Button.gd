@@ -13,12 +13,12 @@ func _process(delta):
 
 
 func _on_pressed():
-	if text == "Solo":
-		text = "Unsolo"
+	if text == "Solo" :
+		text = "UnSolo"
+		get_parent().get_parent().solo = true
 	else :
 		text = "Solo"
-
-
+		get_parent().get_parent().solo = false
 
 
 

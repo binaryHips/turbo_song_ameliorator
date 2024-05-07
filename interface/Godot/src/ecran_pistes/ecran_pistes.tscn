@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://dxfo1vh2t8paa"]
+[gd_scene load_steps=13 format=3 uid="uid://dxfo1vh2t8paa"]
 
 [ext_resource type="Script" path="res://src/ecran_pistes/tracks.gd" id="1_1u1v6"]
 [ext_resource type="Script" path="res://src/ecran_pistes/ecran_pistes.gd" id="1_5fjsj"]
@@ -7,14 +7,24 @@
 [ext_resource type="Script" path="res://src/ecran_pistes/ColorRect.gd" id="3_6hol1"]
 [ext_resource type="Script" path="res://src/ecran_pistes/MenuButtonHelp.gd" id="5_kkf2l"]
 [ext_resource type="PackedScene" uid="uid://dhvnso5gednqs" path="res://src/piste_audio/piste.tscn" id="7_haib7"]
+[ext_resource type="Script" path="res://src/ecran_pistes/head.gd" id="8_fb53o"]
 
 [sub_resource type="Gradient" id="Gradient_8uwnu"]
-colors = PackedColorArray(0.542764, 0.338439, 0.832741, 1, 0, 0, 0, 1)
+interpolation_mode = 2
+colors = PackedColorArray(0.583594, 0.50264, 0.905844, 1, 0.167428, 0.23734, 0.310825, 1)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_srukk"]
 gradient = SubResource("Gradient_8uwnu")
-fill_from = Vector2(0.103448, 0.0948276)
-fill_to = Vector2(0.900862, 0.918103)
+fill_from = Vector2(0.530172, 0.185345)
+fill_to = Vector2(1, 1)
+
+[sub_resource type="Gradient" id="Gradient_62548"]
+offsets = PackedFloat32Array(0, 0.833333)
+colors = PackedColorArray(0.289453, 0.498366, 1.92523e-07, 1, 0, 0.250903, 0.406846, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_6jklg"]
+gradient = SubResource("Gradient_62548")
+width = 6
 
 [node name="Control" type="Control"]
 layout_mode = 3
@@ -37,6 +47,7 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_bottom = 5.24
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.364706, 0, 0.627451, 1)
@@ -45,12 +56,11 @@ script = ExtResource("3_6hol1")
 [node name="MenuButtonFile" type="MenuButton" parent="bandeau acceuil/ColorRect"]
 layout_mode = 1
 anchors_preset = -1
-anchor_right = 0.056
-anchor_bottom = 1.569
-offset_left = -4.0
-offset_top = -5.0
-offset_right = -1.512
-offset_bottom = -5.00344
+anchor_top = -0.2
+anchor_right = 0.055
+anchor_bottom = 1.0
+offset_right = -0.360004
+offset_bottom = 1.0
 button_pressed = true
 text = "File"
 script = ExtResource("1_pcdnp")
@@ -58,12 +68,13 @@ script = ExtResource("1_pcdnp")
 [node name="MenuButtonHelp" type="MenuButton" parent="bandeau acceuil/ColorRect"]
 layout_mode = 1
 anchors_preset = -1
-anchor_right = 0.12
-anchor_bottom = 1.366
-offset_left = 70.0
-offset_top = -5.0
-offset_right = -1.24001
-offset_bottom = -0.992159
+anchor_left = 0.061
+anchor_top = -0.2
+anchor_right = 0.119
+anchor_bottom = 1.0
+offset_left = -0.272003
+offset_right = -0.0879974
+offset_bottom = 1.0
 button_pressed = true
 text = "Help"
 script = ExtResource("5_kkf2l")
@@ -83,26 +94,73 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_top = 5.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = SubResource("GradientTexture2D_srukk")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Control2"]
+[node name="Button" type="Button" parent="Control2"]
 layout_mode = 1
-anchors_preset = 15
+anchors_preset = -1
+anchor_right = 0.102
+anchor_bottom = 0.078
+offset_top = 6.0
+offset_right = -0.504005
+offset_bottom = 0.093998
+toggle_mode = true
+text = "Play"
+
+[node name="counter" type="RichTextLabel" parent="Control2"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.905
+anchor_top = 0.008
+anchor_right = 0.994
+anchor_bottom = 0.077
+offset_left = 0.439941
+offset_top = -0.0160003
+offset_right = -0.0880127
+offset_bottom = -0.279003
+theme_override_font_sizes/normal_font_size = 29
+text = "00:00"
+
+[node name="Tracks" type="VBoxContainer" parent="Control2"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.078
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_top = 0.093998
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/separation = 5
 script = ExtResource("1_1u1v6")
 
-[node name="audio_track" parent="Control2/VBoxContainer" instance=ExtResource("7_haib7")]
+[node name="audio_track" parent="Control2/Tracks" instance=ExtResource("7_haib7")]
 layout_mode = 2
 
-[node name="Button" type="Button" parent="Control2/VBoxContainer"]
+[node name="Button" type="Button" parent="Control2/Tracks"]
 custom_minimum_size = Vector2(35, 20)
 layout_mode = 2
 size_flags_horizontal = 0
 text = "+"
 
-[connection signal="pressed" from="Control2/VBoxContainer/Button" to="Control2/VBoxContainer" method="_on_button_pressed"]
+[node name="head" type="TextureRect" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.197451
+anchor_top = 0.104938
+anchor_right = 0.197451
+anchor_bottom = 0.998457
+offset_left = -5.46399
+offset_right = 0.536011
+texture = SubResource("GradientTexture2D_6jklg")
+script = ExtResource("8_fb53o")
+metadata/_edit_use_anchors_ = true
+
+[connection signal="toggled" from="Control2/Button" to="Control2/Tracks" method="_on_play_toggled"]
+[connection signal="pressed" from="Control2/Tracks/Button" to="Control2/Tracks" method="_on_button_pressed"]
+[connection signal="mouse_entered" from="head" to="head" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="head" to="head" method="_on_mouse_exited"]

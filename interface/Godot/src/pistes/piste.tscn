@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://b3y7p365rgydp"]
+[gd_scene load_steps=7 format=3 uid="uid://b3y7p365rgydp"]
 
 [ext_resource type="Script" path="res://src/pistes/MenuButtonAlgo.gd" id="1_0pgo8"]
 [ext_resource type="Script" path="res://src/pistes/ColorRect3.gd" id="1_q2m2p"]
+[ext_resource type="Script" path="res://src/pistes/piste.gd" id="1_r64od"]
 [ext_resource type="Script" path="res://src/pistes/Button.gd" id="2_2e7xp"]
 [ext_resource type="Script" path="res://src/pistes/MenuButtonInstru.gd" id="2_ptsur"]
 [ext_resource type="Script" path="res://src/pistes/Button2.gd" id="2_pv1d4"]
@@ -14,6 +15,7 @@ anchor_bottom = 0.176
 offset_bottom = -0.0480118
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_r64od")
 
 [node name="ColorRect2" type="ColorRect" parent="."]
 layout_mode = 1
@@ -48,7 +50,7 @@ theme_override_font_sizes/font_size = 16
 text = "Instrument à choisir"
 script = ExtResource("2_ptsur")
 
-[node name="Button" type="Button" parent="ColorRect2"]
+[node name="solo" type="Button" parent="ColorRect2"]
 layout_mode = 2
 offset_left = 125.0
 offset_top = 77.5
@@ -60,7 +62,7 @@ toggle_mode = true
 text = "Lecture"
 script = ExtResource("2_2e7xp")
 
-[node name="Button2" type="Button" parent="ColorRect2"]
+[node name="mute" type="Button" parent="ColorRect2"]
 layout_mode = 0
 offset_left = 38.0
 offset_top = 77.5
@@ -92,5 +94,8 @@ offset_right = 222.0
 color = Color(0.352941, 0.0313726, 0.733333, 1)
 script = ExtResource("1_q2m2p")
 
-[connection signal="pressed" from="ColorRect2/Button" to="ColorRect2/Button" method="_on_pressed"]
-[connection signal="pressed" from="ColorRect2/Button2" to="ColorRect2/Button2" method="_on_pressed"]
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+
+[connection signal="pressed" from="ColorRect2/solo" to="ColorRect2/solo" method="_on_pressed"]
+[connection signal="pressed" from="ColorRect2/mute" to="ColorRect2/mute" method="_on_pressed"]
+[connection signal="value_changed" from="VSlider" to="." method="_on_v_slider_value_changed"]
