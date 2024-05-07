@@ -1,0 +1,112 @@
+[gd_scene load_steps=7 format=3 uid="uid://dhvnso5gednqs"]
+
+[ext_resource type="Script" path="res://src/piste_audio/audiotrack.gd" id="1_s7ill"]
+[ext_resource type="Script" path="res://src/piste_audio/Button.gd" id="3_s1pdd"]
+[ext_resource type="Script" path="res://src/piste_audio/Button2.gd" id="4_6e0ue"]
+[ext_resource type="Shader" path="res://resources/shaders/visualizer.gdshader" id="4_wn3rl"]
+[ext_resource type="Script" path="res://src/piste_audio/ColorRect3.gd" id="5_d01yn"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_krxpp"]
+shader = ExtResource("4_wn3rl")
+shader_parameter/samples = null
+
+[node name="track" type="Control"]
+custom_minimum_size = Vector2(100, 115)
+layout_mode = 3
+anchor_right = 1.0
+anchor_bottom = 0.176
+offset_bottom = -0.0480118
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_s7ill")
+
+[node name="ColorRect2" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.247059, 0.0745098, 0.431373, 1)
+
+[node name="Button" type="Button" parent="ColorRect2"]
+layout_mode = 2
+anchor_left = 0.109
+anchor_top = 0.674
+anchor_right = 0.179
+anchor_bottom = 0.943
+offset_left = -0.568008
+offset_top = -0.0100021
+offset_right = -0.208008
+offset_bottom = 0.0550003
+grow_horizontal = 0
+size_flags_vertical = 8
+toggle_mode = true
+text = "Solo"
+script = ExtResource("3_s1pdd")
+
+[node name="Button2" type="Button" parent="ColorRect2"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.033
+anchor_top = 0.674
+anchor_right = 0.102
+anchor_bottom = 0.943
+offset_left = -0.0159988
+offset_top = -0.0100021
+offset_right = -0.504005
+offset_bottom = -0.945
+toggle_mode = true
+text = "Mute"
+script = ExtResource("4_6e0ue")
+
+[node name="VSlider" type="VSlider" parent="."]
+layout_mode = 2
+anchor_top = 0.209
+anchor_right = 0.021
+anchor_bottom = 0.913
+offset_top = -0.0349998
+offset_right = -0.192001
+offset_bottom = 0.00499725
+min_value = -80.0
+max_value = 0.0
+step = 0.05
+value = -6.0
+
+[node name="ColorRect3" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_krxpp")
+layout_mode = 2
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 222.0
+color = Color(0.352941, 0.0313726, 0.733333, 1)
+script = ExtResource("5_d01yn")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 8.0
+
+[node name="Audio_text" type="RichTextLabel" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.033
+anchor_top = 0.07
+anchor_right = 0.179
+anchor_bottom = 0.609
+offset_left = -0.0159988
+offset_top = -0.0500002
+offset_right = -0.208008
+offset_bottom = -0.0350037
+theme_override_font_sizes/normal_font_size = 12
+bbcode_enabled = true
+text = "[center]No audio loaded!
+(drop an ogg vorbis or mp3 file to start)"
+
+[connection signal="pressed" from="ColorRect2/Button" to="ColorRect2/Button" method="_on_pressed"]
+[connection signal="pressed" from="ColorRect2/Button2" to="ColorRect2/Button2" method="_on_pressed"]
+[connection signal="value_changed" from="VSlider" to="." method="_on_v_slider_value_changed"]
+[connection signal="mouse_entered" from="ColorRect3" to="." method="_on_color_rect_3_mouse_entered"]
+[connection signal="mouse_exited" from="ColorRect3" to="." method="_on_color_rect_3_mouse_exited"]

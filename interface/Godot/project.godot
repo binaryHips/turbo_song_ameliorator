@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/name="Toy"
+config/name="turbo_song_ameliorator"
 run/main_scene="res://src/ecran_pistes/ecran_pistes.tscn"
 config/features=PackedStringArray("4.2", "Mobile")
 config/icon="res://icon.svg"
