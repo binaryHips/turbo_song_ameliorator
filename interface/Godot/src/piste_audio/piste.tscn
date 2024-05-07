@@ -22,8 +22,8 @@ width = 5
 custom_minimum_size = Vector2(100, 115)
 layout_mode = 3
 anchor_right = 1.0
-anchor_bottom = 0.176
-offset_bottom = -0.0480118
+anchor_bottom = 0.177
+offset_bottom = -0.696014
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_s7ill")
@@ -136,6 +136,7 @@ text = "[center]No audio loaded!
 
 [node name="Anadata" type="ColorRect" parent="."]
 visible = false
+custom_minimum_size = Vector2(100, 65)
 layout_mode = 1
 anchors_preset = -1
 anchor_top = 1.0
@@ -201,3 +202,5 @@ text = "[center]BPM"
 [connection signal="value_changed" from="VSlider" to="." method="_on_v_slider_value_changed"]
 [connection signal="mouse_entered" from="ColorRect3" to="." method="_on_color_rect_3_mouse_entered"]
 [connection signal="mouse_exited" from="ColorRect3" to="." method="_on_color_rect_3_mouse_exited"]
+[connection signal="mouse_entered" from="Anadata/Anadata2/Start_time" to="Anadata/Anadata2/Start_time" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="Anadata/Anadata2/Start_time" to="Anadata/Anadata2/Start_time" method="_on_mouse_exited"]

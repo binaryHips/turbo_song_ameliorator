@@ -129,3 +129,4 @@ func get_waveform_samples():
 
 func _on_check_analysis_data_toggled(toggled_on):
 	$Anadata.visible = toggled_on
+	custom_minimum_size.y = 115 if not toggled_on else 115 + 65

@@ -80,3 +80,9 @@ func _on_play_toggled(toggled_on):
 	else:
 		stop()
 
+func _input(event):
+	if event.is_action_pressed("play_stop"):
+		if playing:
+			stop()
+		else:
+			play()

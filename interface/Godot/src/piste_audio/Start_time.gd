@@ -2,8 +2,8 @@ extends TextureRect
 
 
 const bounds:Vector2i = Vector2i(
-	222,
-	1145,
+	0,
+	923,
 )
 
 var mouse_in :=false
@@ -17,7 +17,7 @@ func _process(delta):
 	if dragging:
 		
 		position.x = clamp(
-			get_viewport().get_mouse_position().x,
+			get_viewport().get_mouse_position().x - 222,
 			bounds[0],
 			bounds[1]
 		)
