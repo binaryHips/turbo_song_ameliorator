@@ -2,7 +2,9 @@ use crate::utils::{notes, analysis_file};
 use midly;
 use rand::Rng;
 
-///
+/// génère aléatoirement une mélodie basée sur des probabilités, sur une portion d'une musique, à partir de données analysées sur la musique
+/// Renvoie une mélodie sous la forme d'un vecteur songs représentés par une Note (à l'intensité nulle pour les silences),
+/// un instant de début et un de fin en seconde codées sur deux flottants sur 64 bits. (Les notes commencent à l'instant 0)
 fn markov(ana_file : &analysis_file::AnalysisData, start_time : f64, end_time : f64) -> Vec<(notes::Note, f64, f64)>
 {
     let rhythm_prob : Vec<Vec<f64>> = vec![vec![0.25,0.25,0.25,0.25],
