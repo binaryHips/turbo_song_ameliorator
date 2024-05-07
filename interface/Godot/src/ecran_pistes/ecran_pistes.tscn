@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://dxfo1vh2t8paa"]
+[gd_scene load_steps=10 format=3 uid="uid://dxfo1vh2t8paa"]
 
 [ext_resource type="Script" path="res://src/ecran_pistes/tracks.gd" id="1_1u1v6"]
 [ext_resource type="Script" path="res://src/ecran_pistes/ecran_pistes.gd" id="1_5fjsj"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://src/ecran_pistes/bandeau acceuil.gd" id="2_tie4b"]
 [ext_resource type="Script" path="res://src/ecran_pistes/ColorRect.gd" id="3_6hol1"]
 [ext_resource type="Script" path="res://src/ecran_pistes/MenuButtonHelp.gd" id="5_kkf2l"]
+[ext_resource type="PackedScene" uid="uid://dhvnso5gednqs" path="res://src/piste_audio/piste.tscn" id="7_haib7"]
 
 [sub_resource type="Gradient" id="Gradient_8uwnu"]
 colors = PackedColorArray(0.542764, 0.338439, 0.832741, 1, 0, 0, 0, 1)
@@ -94,6 +95,9 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_1u1v6")
+
+[node name="audio_track" parent="Control2/VBoxContainer" instance=ExtResource("7_haib7")]
+layout_mode = 2
 
 [node name="Button" type="Button" parent="Control2/VBoxContainer"]
 custom_minimum_size = Vector2(35, 20)
