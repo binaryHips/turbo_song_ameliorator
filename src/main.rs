@@ -11,8 +11,11 @@ use utils::file_import;
 
 
 fn main() {
-    test_pitch_detection();
-    test_rhythm();
+    let (bytes,file) = utils::file_import::import_midi("/home/e20210002460/turbo_song_ameliorator/turbo_song_ameliorator/assets/melody/crypt_of_the_necrodancer_disco_descent.mid");
+    let v = utils::analysis_file::get_bpm(&file);
+    print!("{}", v);
+    //test_pitch_detection();
+    //test_rhythm();
 }
 
 

@@ -1,22 +1,42 @@
 use midly::{*, Smf};
 use crate::utils::*;
 use inner::*;
+use anyhow::{anyhow, Result};
+
 
 #[derive(Clone)]
-struct AnalysisData{
+pub struct AnalysisData{
     bpm: usize,
-    notes: Vec< (f64, notes::Scale) >, // notes detected for each timestamp.
-    volumes: Vec< (f64, f32) > //volume
+    scale: notes::Scale,
+    start_time:f64,
+    //scales: Vec< (f64, notes::Scale) >, // notes detected for each timestamp.
+    //volumes: Vec< (f64, f32) > //volume
 }
 
 impl AnalysisData{
 
-    pub fn from_analysis_file(filename: &str) -> Result<AnalysisData>{
-
-
+    pub fn new(bpm: usize, scale: notes::Scale, start_time:f64) -> Self{
+        AnalysisData {bpm, scale, start_time}
     }
 
-    pub fn to_analysis_file(filename: &str) -> Result<AnalysisData>{
+    pub fn from_analysis_file(filename: &str) -> Result<Self>{
+        let res = file_import::import_midi(filename);
+        let smf = res.s;
+
+        let bpm:usize = get_bpm(&smf);
+        
+        let scale:notes::Scale = get_scale(&smf);
+
+        let first_instant:f64 = get_first_instant(&smf);
+
+        Ok(AnalysisData {
+            bpm,
+            scale,
+            start_time: first_instant,
+        })
+    }
+
+    pub fn to_analysis_file(filename: &str){
         
 
     }
@@ -37,10 +57,24 @@ pub fn add_note(file: &Smf, note: notes::Note){
 }
 
 
+///Recovers bpm from an smf
+pub fn get_bpm(file:&Smf) -> usize{
 
-pub fn get_bpm(file:&Smf) -> i32{
+    //find the metaEvent containing the bpm
 
-    return 0;
+    let meta_message = match file.tracks[0][0].kind{
+
+        TrackEventKind::Meta(msg) => msg,
+        _ => panic!("Tempo definition is not the first message of the file")
+    };
+
+    let ms_per_beat = match meta_message{
+
+        MetaMessage::Tempo(v) => v.as_int() as f64,
+        _ => panic!("Tempo definition is not the first message of the file")
+    };
+
+    return (60.0 / (ms_per_beat / 1000.0)) as usize
 }
 
 
@@ -50,29 +84,25 @@ pub fn get_first_instant(file:&Smf) -> f64{
 }
 
 
-///gets scale from a 
+///gets scale from an Smf
 pub fn get_scale(file:&Smf) -> notes::Scale{
-    let mut notes_in_scale = Vec::new();
-    let liste = file.tracks[0];
+    let mut notes_in_scale:Vec<notes::NoteNames> = Vec::new();
+    let liste = &file.tracks[0];
     let mut time = 0;
     let mut debut = 0;
     for event in liste {
         let time = event.delta;
         if time == 0  || debut == 0 {
-            
-            //ancien
 
-            // let message = match event.kind {
-            //     TrackEventKind::Midi { channel, message } => message,
-            //     _ => continue
-            // };
+            let message = match event.kind {
+                TrackEventKind::Midi { channel, message } => message,
+                _ => continue
+            };
 
-            //Nouveau
-            let message = inner!(event, if  TrackEventKind::Midi, else {continue}).message;
 
             match message {
-                MidiMessage::NoteOn {key,vel} =>  notes_in_scale.push(key),
-                MidiMessage::NoteOff {key,vel} => continue ,
+                MidiMessage::NoteOn {key,vel: _} =>  notes_in_scale.push(notes::NoteNames::from(key.as_int() as i32)),
+                MidiMessage::NoteOff {key, vel: _} => continue ,
                 _ => continue
             };
             debut = 2;
@@ -81,5 +111,5 @@ pub fn get_scale(file:&Smf) -> notes::Scale{
             break;
         }
     }
-    return notes::Scale::new(notes_in_scale, notes_in_scale[0]);
+    return notes::Scale::new(notes_in_scale.clone(), notes_in_scale[0]);
 }
