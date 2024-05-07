@@ -11,13 +11,18 @@ use utils::file_import;
 
 
 fn main() {
-    let (bytes,file) = utils::file_import::import_midi("/home/e20210002460/turbo_song_ameliorator/turbo_song_ameliorator/assets/melody/crypt_of_the_necrodancer_disco_descent.mid");
-    let v = utils::analysis_file::get_bpm(&file);
-    print!("{}", v);
-    //test_pitch_detection();
-    //test_rhythm();
+    test_midi_gen_markov();
 }
 
+
+fn test_midi_gen_markov()
+{
+    let scale : utils::notes::Scale = utils::notes::Scale{notes : vec![utils::notes::NoteNames::A, utils::notes::NoteNames::B, utils::notes::NoteNames::C, utils::notes::NoteNames::D, utils::notes::NoteNames::E, utils::notes::NoteNames::F, utils::notes::NoteNames::G], root : utils::notes::NoteNames::A};
+    let ana_file : utils::analysis_file::AnalysisData = utils::analysis_file::AnalysisData{bpm : 120 as usize, scale : scale, start_time : 0.0};
+    let melody : Vec<(utils::notes::Note, f64, f64)> = generator::algorithms::markov::markov(&ana_file, 0.0, 20.0);
+    let pathstring : &str = "./test_make_melody.mid";
+    generator::midi_gen::midi_generator(&melody, &ana_file, &pathstring)
+}
 
 fn test_pitch_detection() {
 

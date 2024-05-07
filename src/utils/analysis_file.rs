@@ -2,13 +2,13 @@ use midly::{*, Smf};
 use crate::utils::*;
 use inner::*;
 use anyhow::{anyhow, Result};
-
+use std::fs;
 
 #[derive(Clone)]
 pub struct AnalysisData{
-    bpm: usize,
-    scale: notes::Scale,
-    start_time:f64,
+    pub bpm: usize,
+    pub scale: notes::Scale,
+    pub start_time:f64,
     //scales: Vec< (f64, notes::Scale) >, // notes detected for each timestamp.
     //volumes: Vec< (f64, f32) > //volume
 }
@@ -20,9 +20,9 @@ impl AnalysisData{
     }
 
     pub fn from_analysis_file(filename: &str) -> Result<Self>{
-        let res = file_import::import_midi(filename);
-        let smf = res.s;
 
+        let bytes:Vec<u8> = fs::read(filename).unwrap();
+        let smf = Smf::parse(&bytes).unwrap();
         let bpm:usize = get_bpm(&smf);
         
         let scale:notes::Scale = get_scale(&smf);

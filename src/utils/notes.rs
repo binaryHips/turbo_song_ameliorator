@@ -10,6 +10,7 @@ const NOTES_STR:[&str; 13] = ["A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F
 
 ///A simple musical note.
 /// 
+#[derive(Copy, Clone)]
 pub struct Note{
 
     pub note:NoteNames,
@@ -38,14 +39,14 @@ impl Note {
         return num::u7::new((21 + self.note as usize + (self.octave as usize * 12)) as u8);
     }
 
-    pub fn quantize_to_scale(&mut self, scale:Scale){
+    pub fn quantize_to_scale(&mut self, scale:&Scale){
         let mut closest:usize = 99999;
-        for n in scale.notes{
-            let d = (n as usize).abs_diff(self.note as usize);
+        for n in &scale.notes{
+            let d = (*n as usize).abs_diff(self.note as usize);
             if d <= closest{
 
                 closest = d;
-                self.note = n;
+                self.note = *n;
             }
         }
 
@@ -57,8 +58,8 @@ impl Note {
 #[derive(Clone)]
 pub struct Scale{
 
-    notes:Vec<NoteNames>,
-    root:NoteNames,
+    pub notes:Vec<NoteNames>,
+    pub root:NoteNames,
 }
 
 impl Scale{
