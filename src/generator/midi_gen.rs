@@ -1,13 +1,15 @@
 use midly::*;
 use crate::utils::{*, notes::*};
 
-pub fn midi_generator(melody : &Vec<(Note, f64, f64)>, ana_file : &analysis_file::AnalysisData, pathstring:&str)
+/// Génère un fichier midi (.mid) reproduisant la mélodie en entré
+/// Le fichier est créé dans le dossier assets/generation
+pub fn midi_generator(melody : &Vec<(Note, f64, f64)>, analysis_data : &analysis_file::AnalysisData, pathstring : &str)
 {
-    let mut mid : Smf = Smf::new(Header::new(Format::SingleTrack, Timing::Metrical(num::u15::new((1920*60/(ana_file.bpm as i64)) as u16))));      // Timecode(Fps::Fps24, 80), 24*80 = 1920
+    let mut mid : Smf = Smf::new(Header::new(Format::SingleTrack, Timing::Metrical(num::u15::new((1920*60/(analysis_data.bpm as i64)) as u16))));      // Timecode(Fps::Fps24, 80), 24*80 = 1920
     let mut track : Track = vec![];
     track.push(TrackEvent{delta : num::u28::new(0 as u32), kind : TrackEventKind::Meta(MetaMessage::TrackName(&[0 as u8]))});
-    track.push(TrackEvent{delta : num::u28::new(0 as u32), kind : TrackEventKind::Meta(MetaMessage::Tempo(num::u24::new((1000000*60/(ana_file.bpm as i64)) as u32)))});
-    track.push(TrackEvent{delta : num::u28::new(0 as u32), kind : TrackEventKind::Meta(MetaMessage::TimeSignature(4 as u8, 2 as u8, (1920*(ana_file.bpm as i32)/60) as u8, 8 as u8))});
+    track.push(TrackEvent{delta : num::u28::new(0 as u32), kind : TrackEventKind::Meta(MetaMessage::Tempo(num::u24::new((1000000*60/(analysis_data.bpm as i64)) as u32)))});
+    track.push(TrackEvent{delta : num::u28::new(0 as u32), kind : TrackEventKind::Meta(MetaMessage::TimeSignature(4 as u8, 2 as u8, (1920*(analysis_data.bpm as i32)/60) as u8, 8 as u8))});
     let list_event : Vec<(Note, f64, bool)> = make_list_event(melody);     // (Note, timing, is_pressed) ordonned
     track.push(make_fevent(&list_event[0], list_event[0].1));
     for i in 1..(list_event.len())
@@ -22,6 +24,8 @@ pub fn midi_generator(melody : &Vec<(Note, f64, f64)>, ana_file : &analysis_file
 }
 
 
+/// Convertit la mélodie (suite de (note, instant début, instant fin) en suite d'évenement (note, instant, pressé ou relaché).
+/// Retourne la suite d'évenement sous forme de Veccteur de triplet (Note, f64, bool).
 fn make_list_event(melody : &Vec<(Note, f64, f64)>) -> Vec<(Note, f64, bool)>
 {
     let mut list_event : Vec<(Note, f64, bool)> = vec![];
@@ -55,6 +59,8 @@ fn make_list_event(melody : &Vec<(Note, f64, f64)>) -> Vec<(Note, f64, bool)>
 }
 
 
+/// Convertit un évenement en TrackEvent, qui est le type formaté par Rust pour les évenement midi
+/// Retourne le TrackEvent correspondant à l'évenement
 fn make_fevent(event : &(Note, f64, bool), time_passed : f64) -> TrackEvent
 {
 

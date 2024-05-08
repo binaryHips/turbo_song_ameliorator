@@ -47,17 +47,17 @@ impl Note {
 
     pub fn quantize_to_scale(&mut self, scale:&Scale){
         let mut closest:usize = 99999;
-        let mut note:NoteNames;
+        let mut note:NoteNames = NoteNames::A;
         for n in &scale.notes{
-            let d = (*n as usize).abs_diff(self.note as usize);
-            let d = min(d, 12-d); //modulo dist
-            if d <= closest{
+            let mut d = (*n as usize).abs_diff(self.note as usize);
+            d = min(d, 12-d); //modulo dist
+            if d < closest{
 
                 closest = d;
-                self.note = n.clone();
+                note = n.clone();
             }
         }
-
+        self.note = note.clone();
     }
 
 }

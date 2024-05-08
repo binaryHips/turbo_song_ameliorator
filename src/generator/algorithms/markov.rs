@@ -1,11 +1,43 @@
 use crate::utils::{notes, analysis_file};
+use crate::generator;
 use midly;
 use rand::Rng;
 
-/// génère aléatoirement une mélodie basée sur des probabilités, sur une portion d'une musique, à partir de données analysées sur la musique
+
+pub struct MarkovGenerator
+{
+    melody : Vec<(notes::Note, f64, f64)>,
+    analysis_data : analysis_file::AnalysisData,
+}
+
+impl MarkovGenerator
+{
+    pub fn new(analysis_data : analysis_file::AnalysisData) -> Self
+    {
+        Self {melody : vec![], analysis_data : analysis_data}
+    }
+
+    pub fn get_melody(self) -> Vec<(notes::Note, f64, f64)>
+    {
+        return self.melody;
+    }
+
+    pub fn generate(&mut self, start_time : f64, end_time : f64)
+    {
+        self.melody = create(&self.analysis_data, start_time, end_time);
+    }
+
+    pub fn midi_gen(self, pathstring : &str)
+    {
+        generator::midi_gen::midi_generator(&self.melody, &self.analysis_data, pathstring);
+    }
+}
+
+
+/// Génère aléatoirement une mélodie basée sur des probabilités, sur une portion d'une musique, à partir de données analysées sur la musique.
 /// Renvoie une mélodie sous la forme d'un vecteur songs représentés par une Note (à l'intensité nulle pour les silences),
 /// un instant de début et un de fin en seconde codées sur deux flottants sur 64 bits. (Les notes commencent à l'instant 0)
-pub fn markov(ana_file : &analysis_file::AnalysisData, start_time : f64, end_time : f64) -> Vec<(notes::Note, f64, f64)>
+fn create(ana_file : &analysis_file::AnalysisData, start_time : f64, end_time : f64) -> Vec<(notes::Note, f64, f64)>
 {
     let rhythm_prob : Vec<Vec<f64>> = vec![
         vec![0.23266745005875442, 0.4336075205640423, 0.0564042303172738, 0.2773207990599295], 
@@ -29,21 +61,45 @@ pub fn markov(ana_file : &analysis_file::AnalysisData, start_time : f64, end_tim
         vec![0.3137254901960784, 0.08823529411764706, 0.09803921568627451, 0.0392156862745098, 0.0, 0.0196078431372549, 0.00980392156862745, 0.00980392156862745, 0.22549019607843138, 0.11764705882352941, 0.0196078431372549, 0.058823529411764705, 0.0], 
         vec![0.10443037974683544, 0.16772151898734178, 0.0759493670886076, 0.12658227848101267, 0.10759493670886076, 0.0379746835443038, 0.10126582278481013, 0.06329113924050633, 0.0981012658227848, 0.04113924050632911, 0.00949367088607595, 0.015822784810126583, 0.05063291139240506]
         ];
+    let note_prob_simple : Vec<Vec<f64>> = vec![
+        vec![0.0, 0.6, 0.0, 0.0, 0.2, 0.0, 0.0, 0.0, 0.0, 0.2, 0.0, 0.0, 0.0],
+        vec![0.0, 0.3684210526315789, 0.0, 0.0, 0.10526315789473684, 0.10526315789473684, 0.05263157894736842, 0.0, 0.0, 0.10526315789473684, 0.0, 0.10526315789473684, 0.15789473684210525],
+        vec![0.14285714285714285, 0.03571428571428571, 0.0, 0.2857142857142857, 0.0, 0.03571428571428571, 0.03571428571428571, 0.0, 0.07142857142857142, 0.10714285714285714, 0.0, 0.0, 0.2857142857142857],
+        vec![0.4, 0.0, 0.4, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.2, 0.0, 0.0],
+        vec![0.2, 0.55, 0.0, 0.0, 0.2, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.05, 0.0],
+        vec![0.0, 0.0, 0.06666666666666667, 0.4666666666666667, 0.0, 0.0, 0.4666666666666667, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+        vec![0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+        vec![0.0, 0.0, 0.1, 0.0, 0.3, 0.2, 0.0, 0.2, 0.15, 0.05, 0.0, 0.0, 0.0],
+        vec![0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.0, 0.5, 0.0, 0.0, 0.0],
+        vec![0.125, 0.0, 0.0, 0.0, 0.0, 0.0, 0.75, 0.0, 0.0, 0.125, 0.0, 0.0, 0.0],
+        vec![0.17647058823529413, 0.11764705882352941, 0.0, 0.0, 0.0, 0.0, 0.0, 0.23529411764705882, 0.23529411764705882, 0.0, 0.0, 0.0, 0.23529411764705882],
+        vec![0.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.5],
+        vec![0.6666666666666666, 0.3333333333333333, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+        vec![0.08695652173913043, 0.08695652173913043, 0.0, 0.17391304347826086, 0.13043478260869565, 0.0, 0.043478260869565216, 0.13043478260869565, 0.043478260869565216, 0.08695652173913043, 0.0, 0.0, 0.21739130434782608]
+        ];
+    let rhythm_prob_simple : Vec<Vec<f64>> = vec![
+    vec![0.03529411764705882, 0.5764705882352941, 0.0, 0.38823529411764707],
+    vec![0.6923076923076923, 0.3076923076923077, 0.0, 0.0],
+    vec![0.2727272727272727, 0.6060606060606061, 0.0, 0.12121212121212122],
+    vec![0.5, 0.45454545454545453, 0.0, 0.045454545454545456]
+    ];
     let dureet : f64 = 60.0/(ana_file.bpm as f64);        // durée d'un temp en seconde
     let mut start_temp  : f64 = ana_file.start_time;
     while start_temp < start_time {start_temp += dureet;}
     let mut end_temp  : f64 = start_temp;
     while end_temp < end_time {end_temp += dureet;}
     let nbt : i32 = ((end_temp - start_temp)/dureet) as i32;        // nombre de temps à jouer
-    let list_rhythm : Vec<f64> = markov_rhythm(nbt, 4, dureet, &rhythm_prob);
+    let list_rhythm : Vec<f64> = markov_rhythm(nbt, 4, dureet, &rhythm_prob_simple);
     let nbn : i32 = list_rhythm.len() as i32;      // nombre de notes
-    let list_notes : Vec<notes::Note> = markov_notes(nbn, &note_prob);
+    let list_notes : Vec<notes::Note> = markov_notes(nbn, &note_prob_simple);
     let mut melody : Vec<(notes::Note, f64, f64)> = construct_melody(list_rhythm, list_notes);
     scaling(&mut melody, &ana_file);
     return melody;
 }
 
 
+/// Génère la suite de rythme nécessaire à la crétion de la mélodie sur le nombre de temps nbt.
+/// Retourne la suite de rythme sous forme d'un vecteur de durées codées par un flottant sur 64 bits.
 fn markov_rhythm(nbt : i32, precision : i32, dureet : f64, tab : &Vec<Vec<f64>>) -> Vec<f64>
 {
     let mut rng = rand::thread_rng();
@@ -70,6 +126,8 @@ fn markov_rhythm(nbt : i32, precision : i32, dureet : f64, tab : &Vec<Vec<f64>>)
 }
 
 
+/// Génère la suite de note nécessaire à la crétion de la mélodie en fonction du nombre de rythme généré par markov_rhythm.
+/// Retourne la suite de note sous forme d'un vecteur de note (structure note).
 fn markov_notes(nbn : i32, tab : &Vec<Vec<f64>>) -> Vec<notes::Note>
 {
     let mut rng = rand::thread_rng();
@@ -109,6 +167,8 @@ fn markov_notes(nbn : i32, tab : &Vec<Vec<f64>>) -> Vec<notes::Note>
 }
 
 
+/// Assemble la suite de note et de rythme pour en faire une mélodie.
+/// Retourne la mélodie sous la forme d'un vecteur de triplet (note, instant de début, instant de fin).
 fn construct_melody(list_rhythm : Vec<f64>, list_notes : Vec<notes::Note>) -> Vec<(notes::Note, f64, f64)>
 {
     let mut melody : Vec<(notes::Note, f64, f64)> = vec![];
@@ -122,11 +182,11 @@ fn construct_melody(list_rhythm : Vec<f64>, list_notes : Vec<notes::Note>) -> Ve
 }
 
 
+/// Récupère la mélodie générée par construct_melody() et ajuste chaque note à la gamme supposé du fichier d'analyse.
+/// Pas de retour.
 fn scaling(melody : &mut Vec<(notes::Note, f64, f64)>, anafile : &analysis_file::AnalysisData)
 {
     for song in melody {
-        println!("{:#?}", song.0.note);
         song.0.quantize_to_scale(&anafile.scale);
-        println!("{:#?}\n", song.0.note);
     }
 }

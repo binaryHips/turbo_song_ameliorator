@@ -17,11 +17,14 @@ fn main() {
 
 fn test_midi_gen_markov()
 {
+    let wave : Wave32 = file_import::import_wav32(r"C:\Users\Clément\Documents\Cours\L3\Projet\turbo_song_ameliorator\assets\sound examples\Evoland - Title Theme.mp3");
+    file_import::save_wav32(&wave, "./assets/generation/theme.wav");
     let scale : utils::notes::Scale = utils::notes::Scale{notes : vec![utils::notes::NoteNames::A, utils::notes::NoteNames::B, utils::notes::NoteNames::C, utils::notes::NoteNames::D, utils::notes::NoteNames::E, utils::notes::NoteNames::F, utils::notes::NoteNames::G], root : utils::notes::NoteNames::A};
-    let ana_file : utils::analysis_file::AnalysisData = utils::analysis_file::AnalysisData{bpm : 120 as usize, scale : scale, start_time : 0.0};
-    let melody : Vec<(utils::notes::Note, f64, f64)> = generator::algorithms::markov::markov(&ana_file, 0.0, 20.0);
-    let pathstring : &str = "./test_make_melody.mid";
-    generator::midi_gen::midi_generator(&melody, &ana_file, &pathstring)
+    let analysis_data : utils::analysis_file::AnalysisData = utils::analysis_file::AnalysisData{bpm : 120 as usize, scale : scale, start_time : 0.0};
+    let mut mark_gen : generator::algorithms::markov::MarkovGenerator = generator::algorithms::markov::MarkovGenerator::new(analysis_data);
+    mark_gen.generate(0.0, 20.0);
+    let pathstring : &str = "./assets/generation/test_make_melody.mid";
+    mark_gen.midi_gen(pathstring);
 }
 
 fn test_pitch_detection() {
