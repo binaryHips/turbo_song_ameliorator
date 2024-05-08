@@ -1,5 +1,7 @@
 extends Control
 
+@onready var AnaData = $Anadata
+
 var can_drop_file := false
 
 var stream:AudioStream
@@ -35,9 +37,13 @@ func _ready():
 	$Audio_text.text = "[center]No audio loaded!\n(drop an ogg vorbis or mp3 file to start)"
 	
 	$AudioStreamPlayer.volume_db = volume
+	move_anadata.call_deferred()
 
-
-
+#hacky but works. Moves anadata under the track
+func move_anadata():
+	AnaData.reparent(get_parent())
+	get_parent().remove_child(get_parent().button)
+	get_parent().add_child(get_parent().button)
 
 
 signal file_changed
@@ -58,7 +64,11 @@ func on_files_dropped(files:PackedStringArray):
 			print("Wav files are not yet supported, sorry!")
 			return
 	
-	$Audio_text.text = "[center]File loaded\n'" + files[0].split('/')[-1] + "'"
+	if "/" in files[0]:
+		
+		$Audio_text.text = "[center]File loaded\n'" + files[0].split('/')[-1] + "'"
+	else:
+		$Audio_text.text = "[center]File loaded\n'" + files[0].split("\\")[-1] + "'"
 	$AudioStreamPlayer.stream = stream
 	stream_length = stream.get_length()
 	file_changed.emit()
@@ -126,7 +136,19 @@ func get_waveform_samples():
 	##
 	$AudioStreamPlayer2.stop()
 
-
+var anadata_tween:Tween
 func _on_check_analysis_data_toggled(toggled_on):
-	$Anadata.visible = toggled_on
-	custom_minimum_size.y = 115 if not toggled_on else 115 + 65
+	anadata_tween = get_tree().create_tween()
+	if toggled_on:
+		AnaData.visible = true
+		anadata_tween.tween_property(AnaData, "custom_minimum_size", Vector2(100,65), 0.1)
+		anadata_tween.set_ease(Tween.EASE_IN_OUT)
+		anadata_tween.set_trans(Tween.TRANS_EXPO)
+		anadata_tween.play()
+	else:
+		anadata_tween.tween_property(AnaData, "custom_minimum_size", Vector2(100,0), 0.1)
+		anadata_tween.set_ease(Tween.EASE_IN_OUT)
+		anadata_tween.set_trans(Tween.TRANS_EXPO)
+		anadata_tween.play()
+		await anadata_tween.finished
+		AnaData.visible = false

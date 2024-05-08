@@ -2,6 +2,9 @@ extends Control
 
 var volume:float = 0.0
 
+var algorithm:String = ""
+var instrument:String = ""
+
 signal track_status_changed #soloing has side effects
 var muted := false:
 	set(v):

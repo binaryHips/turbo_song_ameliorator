@@ -8,11 +8,11 @@
 [ext_resource type="Script" path="res://src/pistes/Button2.gd" id="2_pv1d4"]
 
 [node name="track" type="Control"]
-custom_minimum_size = Vector2(100, 115)
+custom_minimum_size = Vector2(100, 100)
 layout_mode = 3
 anchor_right = 1.0
 anchor_bottom = 0.176
-offset_bottom = -0.0480118
+offset_bottom = -24.048
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_r64od")
@@ -28,46 +28,67 @@ color = Color(0.247059, 0.0745098, 0.431373, 1)
 
 [node name="MenuButtonAlgo" type="MenuButton" parent="ColorRect2"]
 layout_mode = 2
-offset_left = 35.0
-offset_top = 11.5
-offset_right = 199.0
-offset_bottom = 42.5
+anchor_left = 0.0436042
+anchor_top = 0.0296
+anchor_right = 0.159604
+anchor_bottom = 0.2897
+offset_left = -0.232002
+offset_top = 0.0399997
+offset_right = 0.135986
+offset_bottom = 0.0299988
 size_flags_horizontal = 0
 size_flags_vertical = 0
-theme_override_font_sizes/font_size = 16
-text = "Algorithme à choisir"
+theme_override_font_sizes/font_size = 13
+text = "Algorithm"
+flat = false
 script = ExtResource("1_0pgo8")
+metadata/_edit_use_anchors_ = true
 
 [node name="MenuButtonInstru" type="MenuButton" parent="ColorRect2"]
 layout_mode = 2
-offset_left = 33.0
-offset_top = 39.5
-offset_right = 198.0
-offset_bottom = 70.5
+anchor_left = 0.0436042
+anchor_top = 0.3202
+anchor_right = 0.158868
+anchor_bottom = 0.5803
+offset_left = -0.232002
+offset_top = -0.0200024
+offset_right = -0.0160065
+offset_bottom = -0.0300026
 size_flags_horizontal = 0
 size_flags_vertical = 8
-theme_override_font_sizes/font_size = 16
-text = "Instrument à choisir"
+theme_override_font_sizes/font_size = 13
+text = "Instrument"
+flat = false
 script = ExtResource("2_ptsur")
+metadata/_edit_use_anchors_ = true
 
 [node name="solo" type="Button" parent="ColorRect2"]
 layout_mode = 2
-offset_left = 125.0
-offset_top = 77.5
-offset_right = 206.0
-offset_bottom = 108.5
+anchor_left = 0.106
+anchor_top = 0.6
+anchor_right = 0.176
+anchor_bottom = 0.944
+offset_left = -1.11201
+offset_top = 2.0
+offset_right = -0.752014
+offset_bottom = 2.03999
 grow_horizontal = 0
 size_flags_vertical = 8
 toggle_mode = true
-text = "Lecture"
+text = "Solo"
 script = ExtResource("2_2e7xp")
 
 [node name="mute" type="Button" parent="ColorRect2"]
-layout_mode = 0
-offset_left = 38.0
-offset_top = 77.5
-offset_right = 117.0
-offset_bottom = 107.5
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.03
+anchor_top = 0.6
+anchor_right = 0.099
+anchor_bottom = 0.944
+offset_left = -0.560001
+offset_top = 2.0
+offset_right = -1.048
+offset_bottom = 2.03999
 toggle_mode = true
 text = "Mute"
 script = ExtResource("2_pv1d4")
@@ -86,16 +107,36 @@ step = 0.05
 value = -6.0
 
 [node name="ColorRect3" type="ColorRect" parent="."]
+clip_contents = true
 layout_mode = 2
+anchor_left = 0.193
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 222.0
-offset_right = 222.0
+offset_left = -0.335999
 color = Color(0.352941, 0.0313726, 0.733333, 1)
 script = ExtResource("1_q2m2p")
+
+[node name="highlight" type="ColorRect" parent="ColorRect3"]
+visible = false
+z_index = 1
+custom_minimum_size = Vector2(1, 0)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.113
+anchor_top = 0.0555556
+anchor_right = 0.114065
+anchor_bottom = 0.944
+offset_left = -0.090004
+offset_right = -0.0800018
+offset_bottom = 0.0399971
+mouse_filter = 2
+color = Color(0.785406, 0.788662, 0.787856, 0.34902)
+metadata/_edit_use_anchors_ = true
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 
 [connection signal="pressed" from="ColorRect2/solo" to="ColorRect2/solo" method="_on_pressed"]
 [connection signal="pressed" from="ColorRect2/mute" to="ColorRect2/mute" method="_on_pressed"]
 [connection signal="value_changed" from="VSlider" to="." method="_on_v_slider_value_changed"]
+[connection signal="mouse_entered" from="ColorRect3" to="ColorRect3" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="ColorRect3" to="ColorRect3" method="_on_mouse_exited"]

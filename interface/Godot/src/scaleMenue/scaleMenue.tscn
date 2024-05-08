@@ -1,9 +1,46 @@
-[gd_scene load_steps=2 format=3 uid="uid://dtnu7y40tkdcs"]
+[gd_scene load_steps=8 format=3 uid="uid://dtnu7y40tkdcs"]
 
 [ext_resource type="Script" path="res://src/scaleMenue/PopupPanel.gd" id="1_rhht0"]
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0dna3"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_818de"]
+bg_color = Color(0.454524, 0.454524, 0.454524, 1)
+corner_radius_top_left = 50
+corner_radius_top_right = 50
+corner_radius_bottom_right = 50
+corner_radius_bottom_left = 50
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qs4bl"]
+bg_color = Color(0.219501, 0.219501, 0.219501, 1)
+corner_radius_top_left = 50
+corner_radius_top_right = 50
+corner_radius_bottom_right = 50
+corner_radius_bottom_left = 50
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2djvj"]
+bg_color = Color(0.680244, 0.172421, 0.236999, 1)
+corner_radius_top_left = 50
+corner_radius_top_right = 50
+corner_radius_bottom_right = 50
+corner_radius_bottom_left = 50
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e8pps"]
+bg_color = Color(0.456901, 0.474961, 0.510783, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="Theme" id="Theme_fkpwh"]
+Button/styles/focus = SubResource("StyleBoxEmpty_0dna3")
+Button/styles/hover = SubResource("StyleBoxFlat_818de")
+Button/styles/normal = SubResource("StyleBoxFlat_qs4bl")
+Button/styles/pressed = SubResource("StyleBoxFlat_2djvj")
+PopupPanel/styles/panel = SubResource("StyleBoxFlat_e8pps")
+
 [node name="PopupPanel" type="PopupPanel"]
-size = Vector2i(210, 610)
+size = Vector2i(110, 425)
 visible = true
 script = ExtResource("1_rhht0")
 
@@ -14,8 +51,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 4.0
 offset_top = 4.0
-offset_right = 206.0
-offset_bottom = 606.0
+offset_right = 106.0
+offset_bottom = 421.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -23,4 +60,5 @@ grow_vertical = 2
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
+theme = SubResource("Theme_fkpwh")
 theme_override_constants/separation = 5

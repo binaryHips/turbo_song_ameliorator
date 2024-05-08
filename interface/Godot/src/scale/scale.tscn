@@ -1,0 +1,44 @@
+[gd_scene load_steps=5 format=3 uid="uid://clxrnw0rdgrg7"]
+
+[ext_resource type="Script" path="res://src/scale/scale.gd" id="1_ag723"]
+[ext_resource type="PackedScene" uid="uid://dtnu7y40tkdcs" path="res://src/scaleMenue/scaleMenue.tscn" id="2_pwoxy"]
+
+[sub_resource type="Gradient" id="Gradient_pkm8y"]
+colors = PackedColorArray(0.271615, 0.000171971, 0.327417, 1, 0.908978, 0.00308585, 0.129278, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_klt1m"]
+gradient = SubResource("Gradient_pkm8y")
+
+[node name="scale" type="TextureRect"]
+custom_minimum_size = Vector2(0, 30)
+anchors_preset = -1
+anchor_bottom = 0.046
+offset_right = 28.0
+offset_bottom = 0.191998
+texture = SubResource("GradientTexture2D_klt1m")
+expand_mode = 1
+script = ExtResource("1_ag723")
+
+[node name="PopupPanel" parent="." instance=ExtResource("2_pwoxy")]
+title = "Scale"
+position = Vector2i(60, 45)
+visible = false
+borderless = false
+always_on_top = true
+
+[node name="notes_text" type="RichTextLabel" parent="."]
+z_index = 1
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.571
+anchor_top = 0.7
+anchor_right = 0.571
+anchor_bottom = 0.7
+offset_left = 0.0119991
+offset_right = 168.012
+offset_bottom = 23.0
+mouse_filter = 2
+fit_content = true
+
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]

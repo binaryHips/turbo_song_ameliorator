@@ -2,7 +2,7 @@ extends VBoxContainer
 const PISTE = preload("res://src/pistes/piste.tscn")
 
 @onready var button = $Button
-@onready var counter = get_parent().get_node("counter")
+@onready var counter = get_parent().get_parent().get_node("counter")
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	$audio_track.file_changed.connect(file_changed)
@@ -48,14 +48,20 @@ func file_changed():
 
 func play():
 	playing = true
-	for i in get_child_count()-1: #-1 for the button
+	for i in get_child_count():
 		var c = get_child(i)
+		
+		if not c.has_method("play"): continue #duck typing
+		
 		c.play(current_time)
 		
 func stop():
 	playing = false
-	for i in get_child_count()-1:
+	for i in get_child_count():
 		var c = get_child(i)
+		
+		if not c.has_method("play"): continue
+		
 		c.stop()
 
 var solo_mode := false
@@ -63,10 +69,15 @@ func redo_track_status():
 	solo_mode = false
 	for i in get_child_count()-1:
 		var c = get_child(i)
+		
+		if not c.has_method("play"): continue
+		
 		solo_mode = solo_mode or c.solo
 	
 	for i in get_child_count()-1:
 		var c = get_child(i)
+		
+		if not c.has_method("play"): continue
 		
 		if solo_mode:
 			c.deactivated = not c.solo

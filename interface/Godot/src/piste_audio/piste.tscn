@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://dhvnso5gednqs"]
+[gd_scene load_steps=12 format=3 uid="uid://dhvnso5gednqs"]
 
 [ext_resource type="Script" path="res://src/piste_audio/audiotrack.gd" id="1_s7ill"]
 [ext_resource type="Script" path="res://src/piste_audio/Button.gd" id="3_s1pdd"]
@@ -6,6 +6,9 @@
 [ext_resource type="Shader" path="res://resources/shaders/visualizer.gdshader" id="4_wn3rl"]
 [ext_resource type="Script" path="res://src/piste_audio/ColorRect3.gd" id="5_d01yn"]
 [ext_resource type="Script" path="res://src/piste_audio/Start_time.gd" id="6_k8sd0"]
+[ext_resource type="Script" path="res://src/piste_audio/Anadata2.gd" id="6_wnfgv"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xwvbf"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_krxpp"]
 shader = ExtResource("4_wn3rl")
@@ -17,6 +20,7 @@ shader_parameter/n = null
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_fffwb"]
 gradient = SubResource("Gradient_yffif")
 width = 5
+height = 1
 
 [node name="track" type="Control"]
 custom_minimum_size = Vector2(100, 115)
@@ -81,15 +85,15 @@ offset_left = 0.0480003
 offset_top = -0.0499954
 offset_right = 0.271996
 offset_bottom = 0.0299988
+theme_override_styles/normal = SubResource("StyleBoxEmpty_xwvbf")
 
 [node name="RichTextLabel" type="RichTextLabel" parent="ColorRect2/check_analysis_data"]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 1.0
-anchor_right = 4.136
+anchor_right = 4.227
 anchor_bottom = 1.0
-offset_left = -4.0
-offset_right = 0.0159912
+offset_right = 0.0119934
 text = "Edit analysis data"
 
 [node name="VSlider" type="VSlider" parent="."]
@@ -136,7 +140,7 @@ text = "[center]No audio loaded!
 
 [node name="Anadata" type="ColorRect" parent="."]
 visible = false
-custom_minimum_size = Vector2(100, 65)
+custom_minimum_size = Vector2(100, 0)
 layout_mode = 1
 anchors_preset = -1
 anchor_top = 1.0
@@ -145,7 +149,6 @@ anchor_bottom = 1.57391
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.768914, 0.369582, 0.557243, 1)
-metadata/_edit_use_anchors_ = true
 
 [node name="Anadata2" type="ColorRect" parent="Anadata"]
 layout_mode = 1
@@ -158,16 +161,20 @@ offset_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.685747, 0.228835, 0.434485, 1)
-metadata/_edit_use_anchors_ = true
+script = ExtResource("6_wnfgv")
 
 [node name="Start_time" type="TextureRect" parent="Anadata/Anadata2"]
+z_index = 1
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.192
+anchor_top = 0.552
 anchor_right = 0.199
-anchor_bottom = 1.0
+anchor_bottom = 0.985
 offset_left = 0.440002
+offset_top = 0.0161896
 offset_right = -0.0700073
+offset_bottom = 1.00534
 texture = SubResource("GradientTexture2D_fffwb")
 script = ExtResource("6_k8sd0")
 
@@ -202,5 +209,7 @@ text = "[center]BPM"
 [connection signal="value_changed" from="VSlider" to="." method="_on_v_slider_value_changed"]
 [connection signal="mouse_entered" from="ColorRect3" to="." method="_on_color_rect_3_mouse_entered"]
 [connection signal="mouse_exited" from="ColorRect3" to="." method="_on_color_rect_3_mouse_exited"]
+[connection signal="mouse_entered" from="Anadata/Anadata2" to="Anadata/Anadata2" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="Anadata/Anadata2" to="Anadata/Anadata2" method="_on_mouse_exited"]
 [connection signal="mouse_entered" from="Anadata/Anadata2/Start_time" to="Anadata/Anadata2/Start_time" method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="Anadata/Anadata2/Start_time" to="Anadata/Anadata2/Start_time" method="_on_mouse_exited"]

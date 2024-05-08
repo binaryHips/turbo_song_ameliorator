@@ -1,0 +1,36 @@
+[gd_scene load_steps=3 format=3 uid="uid://bh3cx8s2k1mow"]
+
+[sub_resource type="Gradient" id="Gradient_kdolw"]
+interpolation_mode = 2
+colors = PackedColorArray(0.278806, 0.306799, 0.402109, 1, 0.370707, 0.760479, 0.87131, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_lpv6k"]
+gradient = SubResource("Gradient_kdolw")
+width = 16
+height = 16
+use_hdr = true
+fill_from = Vector2(0, 1)
+
+[node name="generation_block" type="Control"]
+layout_mode = 3
+anchor_right = 0.181
+anchor_bottom = 0.122
+offset_top = 3.0
+offset_right = 0.487991
+offset_bottom = -3.05601
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 4
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.01
+anchor_right = 0.99
+anchor_bottom = 1.0
+offset_left = -0.0900002
+offset_right = 0.0899811
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("GradientTexture2D_lpv6k")
+expand_mode = 1
