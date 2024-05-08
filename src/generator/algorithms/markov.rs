@@ -35,7 +35,7 @@ pub fn markov(ana_file : &analysis_file::AnalysisData, start_time : f64, end_tim
     let mut end_temp  : f64 = start_temp;
     while end_temp < end_time {end_temp += dureet;}
     let nbt : i32 = ((end_temp - start_temp)/dureet) as i32;        // nombre de temps à jouer
-    let list_rhythm : Vec<f64> = markov_rhythm(nbt, 4, &rhythm_prob);
+    let list_rhythm : Vec<f64> = markov_rhythm(nbt, 4, dureet, &rhythm_prob);
     let nbn : i32 = list_rhythm.len() as i32;      // nombre de notes
     let list_notes : Vec<notes::Note> = markov_notes(nbn, &note_prob);
     let mut melody : Vec<(notes::Note, f64, f64)> = construct_melody(list_rhythm, list_notes);
@@ -44,7 +44,7 @@ pub fn markov(ana_file : &analysis_file::AnalysisData, start_time : f64, end_tim
 }
 
 
-fn markov_rhythm(nbt : i32, precision : i32, tab : &Vec<Vec<f64>>) -> Vec<f64>
+fn markov_rhythm(nbt : i32, precision : i32, dureet : f64, tab : &Vec<Vec<f64>>) -> Vec<f64>
 {
     let mut rng = rand::thread_rng();
     let mut somme : i32 = 0;
@@ -62,7 +62,7 @@ fn markov_rhythm(nbt : i32, precision : i32, tab : &Vec<Vec<f64>>) -> Vec<f64>
         // le i représente au début le position dans la liste de 0 à 3 mais fini à 1 de trop, or,
         // on l'utilise ensuite seulement pour les quarts allant de 1 à 4, donc tout va bien
         somme += i;
-        list_rhythm.push((i as f64)/(precision as f64));
+        list_rhythm.push(dureet*(i as f64)/(precision as f64));
     }
     let last = list_rhythm.len()-1;
     if somme > nbt*precision {list_rhythm[last] -= ((somme-nbt*precision) as f64)/(precision as f64);}
@@ -125,6 +125,8 @@ fn construct_melody(list_rhythm : Vec<f64>, list_notes : Vec<notes::Note>) -> Ve
 fn scaling(melody : &mut Vec<(notes::Note, f64, f64)>, anafile : &analysis_file::AnalysisData)
 {
     for song in melody {
+        println!("{:#?}", song.0.note);
         song.0.quantize_to_scale(&anafile.scale);
+        println!("{:#?}\n", song.0.note);
     }
 }

@@ -3,18 +3,17 @@ use crate::utils::{*, notes::*};
 
 pub fn midi_generator(melody : &Vec<(Note, f64, f64)>, ana_file : &analysis_file::AnalysisData, pathstring:&str)
 {
-    let mut mid : Smf = Smf::new(Header::new(Format::SingleTrack, Timing::Timecode(Fps::Fps24, 80)));
+    let mut mid : Smf = Smf::new(Header::new(Format::SingleTrack, Timing::Metrical(num::u15::new((1920*60/(ana_file.bpm as i64)) as u16))));      // Timecode(Fps::Fps24, 80), 24*80 = 1920
     let mut track : Track = vec![];
     track.push(TrackEvent{delta : num::u28::new(0 as u32), kind : TrackEventKind::Meta(MetaMessage::TrackName(&[0 as u8]))});
-    track.push(TrackEvent{delta : num::u28::new(0 as u32), kind : TrackEventKind::Meta(MetaMessage::Tempo(num::u24::new((1000000*(ana_file.bpm as i64)/60) as u32)))});
-    track.push(TrackEvent{delta : num::u28::new(0 as u32), kind : TrackEventKind::Meta(MetaMessage::TimeSignature(4 as u8, 4 as u8, (60*24*80/(ana_file.bpm as i32)) as u8, 8 as u8))});
+    track.push(TrackEvent{delta : num::u28::new(0 as u32), kind : TrackEventKind::Meta(MetaMessage::Tempo(num::u24::new((1000000*60/(ana_file.bpm as i64)) as u32)))});
+    track.push(TrackEvent{delta : num::u28::new(0 as u32), kind : TrackEventKind::Meta(MetaMessage::TimeSignature(4 as u8, 2 as u8, (1920*(ana_file.bpm as i32)/60) as u8, 8 as u8))});
     let list_event : Vec<(Note, f64, bool)> = make_list_event(melody);     // (Note, timing, is_pressed) ordonned
     track.push(make_fevent(&list_event[0], list_event[0].1));
     for i in 1..(list_event.len())
     {
         let time_passed : f64 = list_event[i].1 - list_event[i-1].1;
         let fevent : TrackEvent = make_fevent(&list_event[i], time_passed);    // event formated
-        println!("{:#?}", fevent.delta);
         track.push(fevent);
     }
     track.push(TrackEvent{delta : num::u28::new(0 as u32), kind : TrackEventKind::Meta(MetaMessage::EndOfTrack)});

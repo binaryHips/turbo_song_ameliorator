@@ -3,7 +3,7 @@ use num_derive::FromPrimitive;
 use num_traits::FromPrimitive;
 use midly::num;
 
-#[derive(FromPrimitive, Copy, Clone)]
+#[derive(FromPrimitive, Copy, Clone, Debug)]
 pub enum NoteNames {A, Ad, B, C, Cd, D, Dd, E, F, Fd, G, Gd, SILENCE}
 
 const NOTES_STR:[&str; 13] = ["A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "silence"];
