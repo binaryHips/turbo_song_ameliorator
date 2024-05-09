@@ -5,9 +5,17 @@ use anyhow::{anyhow, Result};
 use std::fs;
 
 #[derive(Clone)]
+
+/// A struct that represents the data from an analysis.
+/// Can be constructed from a MIDI analysis file (experimental)
 pub struct AnalysisData{
+    /// beats per minute. Currently doesnt support non-int values.
     pub bpm: usize,
+
+    /// Scale of the song. For now, assumes the whole song is in the same scale.
     pub scale: notes::Scale,
+
+    /// Offset from the start of the file to the start of the song
     pub start_time:f64,
     //scales: Vec< (f64, notes::Scale) >, // notes detected for each timestamp.
     //volumes: Vec< (f64, f32) > //volume
@@ -15,10 +23,13 @@ pub struct AnalysisData{
 
 impl AnalysisData{
 
+    ///Creates a new AnalysisData
     pub fn new(bpm: usize, scale: notes::Scale, start_time:f64) -> Self{
         AnalysisData {bpm, scale, start_time}
     }
 
+    /// DOES NOT WORK YET
+    /// Imports a midi file containing analysis file information, and parses its data into an AnalysisData.
     pub fn from_analysis_file(filename: &str) -> Result<Self>{
 
         let bytes:Vec<u8> = fs::read(filename).unwrap();
@@ -42,15 +53,7 @@ impl AnalysisData{
     }
 }
 
-
-///Parses a MIDI file containing analysis informations. 
-
-pub fn parse_analysis_file(midi:&Smf){
-
-
-}
-
-pub fn add_note(file: &Smf, note: notes::Note){
+fn add_note(file: &Smf, note: notes::Note){
 
     let note:midly::MidiMessage;
     
@@ -58,7 +61,7 @@ pub fn add_note(file: &Smf, note: notes::Note){
 
 
 ///Recovers bpm from an smf
-pub fn get_bpm(file:&Smf) -> usize{
+fn get_bpm(file:&Smf) -> usize{
 
     //find the metaEvent containing the bpm
 
@@ -78,14 +81,14 @@ pub fn get_bpm(file:&Smf) -> usize{
 }
 
 
-pub fn get_first_instant(file:&Smf) -> f64{
+fn get_first_instant(file:&Smf) -> f64{
 
     return 5.0;
 }
 
 
 ///gets scale from an Smf
-pub fn get_scale(file:&Smf) -> notes::Scale{
+fn get_scale(file:&Smf) -> notes::Scale{
     let mut notes_in_scale:Vec<notes::NoteNames> = Vec::new();
     let liste = &file.tracks[0];
     let mut time = 0;

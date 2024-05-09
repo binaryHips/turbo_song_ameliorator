@@ -4,7 +4,7 @@ use std::fs;
 use midly::Smf;
 
 
-/// Imports a wave file in 32 bits fixed-point format.
+/// Imports an audio file of any format as a wave in 32 bits fixed-point format.
 /// Takes an absolute path string as an input.
 pub fn import_wav32(pathstring:&str) -> Wave32 {
     let path = std::path::Path::new(&pathstring);
