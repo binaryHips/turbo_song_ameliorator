@@ -3,8 +3,12 @@ use num_derive::FromPrimitive;
 use num_traits::FromPrimitive;
 use midly::num;
 use std::cmp::min;
-#[derive(FromPrimitive, Copy, Clone, Debug)]
-pub enum NoteNames {A, Ad, B, C, Cd, D, Dd, E, F, Fd, G, Gd, SILENCE}
+use godot::prelude::*;
+
+
+
+#[derive(FromPrimitive, Copy, Clone, Debug, Default)]
+pub enum NoteNames {#[default] A, Ad, B, C, Cd, D, Dd, E, F, Fd, G, Gd, SILENCE}
 
 impl From<i32> for NoteNames {
     fn from(n: i32) -> Self {
@@ -17,6 +21,7 @@ const NOTES_STR:[&str; 13] = ["A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F
 ///A simple musical note.
 /// 
 #[derive(Copy, Clone)]
+
 pub struct Note{
 
     pub note:NoteNames,
@@ -63,7 +68,7 @@ impl Note {
 }
 
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct Scale{
 
     pub notes:Vec<NoteNames>,

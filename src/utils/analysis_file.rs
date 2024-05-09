@@ -1,13 +1,16 @@
 use midly::{*, Smf};
+use num_traits::FromPrimitive;
 use crate::utils::*;
-use inner::*;
 use anyhow::{anyhow, Result};
 use std::fs;
-
-#[derive(Clone)]
-
+use godot::prelude::*;
+use num_derive::FromPrimitive;
 /// A struct that represents the data from an analysis.
 /// Can be constructed from a MIDI analysis file (experimental)
+/// 
+
+
+#[derive(Clone, Debug)]
 pub struct AnalysisData{
     /// beats per minute. Currently doesnt support non-int values.
     pub bpm: usize,
