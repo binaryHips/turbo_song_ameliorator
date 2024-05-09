@@ -3,7 +3,7 @@ extends Button
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	text = "Solo"
+	pass # Replace with function body.
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -14,11 +14,13 @@ func _process(delta):
 
 func _on_pressed():
 	if text == "Solo" :
-		text = "UnSolo"
+		text = "Unsolo"
 		get_parent().get_parent().solo = true
 	else :
 		text = "Solo"
 		get_parent().get_parent().solo = false
+
+
 
 
 

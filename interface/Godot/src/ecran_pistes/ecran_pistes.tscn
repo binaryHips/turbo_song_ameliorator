@@ -1,19 +1,48 @@
-[gd_scene load_steps=9 format=3 uid="uid://dxfo1vh2t8paa"]
+[gd_scene load_steps=17 format=3 uid="uid://dxfo1vh2t8paa"]
 
 [ext_resource type="Script" path="res://src/ecran_pistes/tracks.gd" id="1_1u1v6"]
 [ext_resource type="Script" path="res://src/ecran_pistes/ecran_pistes.gd" id="1_5fjsj"]
 [ext_resource type="Script" path="res://src/ecran_pistes/MenuButtonFile.gd" id="1_pcdnp"]
+[ext_resource type="Texture2D" uid="uid://ckgmwtyi1c0s6" path="res://resources/sprites/bg.png" id="2_g43os"]
 [ext_resource type="Script" path="res://src/ecran_pistes/bandeau acceuil.gd" id="2_tie4b"]
-[ext_resource type="Script" path="res://src/ecran_pistes/ColorRect.gd" id="3_6hol1"]
 [ext_resource type="Script" path="res://src/ecran_pistes/MenuButtonHelp.gd" id="5_kkf2l"]
+[ext_resource type="PackedScene" uid="uid://dhvnso5gednqs" path="res://src/piste_audio/piste.tscn" id="7_haib7"]
+[ext_resource type="Script" path="res://src/ecran_pistes/head.gd" id="8_fb53o"]
 
-[sub_resource type="Gradient" id="Gradient_8uwnu"]
-colors = PackedColorArray(0.542764, 0.338439, 0.832741, 1, 0, 0, 0, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6t2nf"]
+bg_color = Color(0.158472, 0.158472, 0.158472, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
 
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_srukk"]
-gradient = SubResource("Gradient_8uwnu")
-fill_from = Vector2(0.103448, 0.0948276)
-fill_to = Vector2(0.900862, 0.918103)
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ak7aj"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dhv7a"]
+bg_color = Color(0.239003, 0.241978, 0.241244, 1)
+
+[sub_resource type="Theme" id="Theme_eofbh"]
+Button/styles/normal = SubResource("StyleBoxFlat_6t2nf")
+CheckButton/styles/focus = SubResource("StyleBoxEmpty_ak7aj")
+VScrollBar/styles/grabber = SubResource("StyleBoxFlat_dhv7a")
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vj8m1"]
+
+[sub_resource type="Theme" id="Theme_24eif"]
+Button/styles/disabled = null
+Button/styles/focus = null
+Button/styles/hover = null
+Button/styles/normal = null
+Button/styles/pressed = null
+CheckButton/styles/focus = SubResource("StyleBoxEmpty_vj8m1")
+
+[sub_resource type="Gradient" id="Gradient_62548"]
+offsets = PackedFloat32Array(0, 0.833333)
+colors = PackedColorArray(0.289453, 0.498366, 1.92523e-07, 1, 0, 0.250903, 0.406846, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_6jklg"]
+gradient = SubResource("Gradient_62548")
+width = 6
 
 [node name="Control" type="Control"]
 layout_mode = 3
@@ -22,7 +51,18 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = SubResource("Theme_eofbh")
 script = ExtResource("1_5fjsj")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_g43os")
+expand_mode = 2
 
 [node name="bandeau acceuil" type="Control" parent="."]
 layout_mode = 1
@@ -36,36 +76,47 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_bottom = 5.24
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.364706, 0, 0.627451, 1)
-script = ExtResource("3_6hol1")
+color = Color(0.364706, 0, 0.627451, 0)
 
 [node name="MenuButtonFile" type="MenuButton" parent="bandeau acceuil/ColorRect"]
 layout_mode = 1
 anchors_preset = -1
-anchor_right = 0.056
-anchor_bottom = 1.569
-offset_left = -4.0
-offset_top = -5.0
-offset_right = -1.512
-offset_bottom = -5.00344
+anchor_top = 0.12
+anchor_right = 0.055
+anchor_bottom = 1.32
+offset_right = -0.360004
+offset_bottom = 1.0
+theme_override_colors/font_color = Color(0.151276, 0.151276, 0.151276, 1)
+theme_override_colors/font_pressed_color = Color(0.147672, 0.147672, 0.147672, 1)
+theme_override_colors/font_hover_color = Color(0.332881, 0.332881, 0.332881, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_colors/font_disabled_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 button_pressed = true
 text = "File"
 script = ExtResource("1_pcdnp")
+metadata/_edit_use_anchors_ = true
 
 [node name="MenuButtonHelp" type="MenuButton" parent="bandeau acceuil/ColorRect"]
 layout_mode = 1
 anchors_preset = -1
-anchor_right = 0.12
-anchor_bottom = 1.366
-offset_left = 70.0
-offset_top = -5.0
-offset_right = -1.24001
-offset_bottom = -0.992159
+anchor_left = 0.061
+anchor_top = 0.12
+anchor_right = 0.119
+anchor_bottom = 1.32
+offset_left = -0.272003
+offset_right = -0.0879974
+offset_bottom = 1.0
+theme_override_colors/font_color = Color(0.152941, 0.152941, 0.152941, 1)
+theme_override_colors/font_pressed_color = Color(0.152941, 0.152941, 0.152941, 1)
+theme_override_colors/font_hover_color = Color(0.266575, 0.266575, 0.266575, 1)
 button_pressed = true
 text = "Help"
 script = ExtResource("5_kkf2l")
+metadata/_edit_use_anchors_ = true
 
 [node name="Control2" type="Control" parent="."]
 layout_mode = 1
@@ -77,28 +128,78 @@ offset_bottom = -1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="TextureRect" type="TextureRect" parent="Control2"]
+[node name="Button" type="Button" parent="Control2"]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = SubResource("GradientTexture2D_srukk")
+anchors_preset = -1
+anchor_left = 0.134
+anchor_top = 0.04
+anchor_right = 0.163
+anchor_bottom = 0.081
+offset_left = -0.368011
+offset_top = -0.0800018
+offset_right = 0.223999
+offset_bottom = 0.213001
+theme_override_font_sizes/font_size = 13
+toggle_mode = true
+text = "Play"
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Control2"]
+[node name="counter" type="RichTextLabel" parent="Control2"]
 layout_mode = 1
-anchors_preset = 15
+anchors_preset = -1
+anchor_left = 0.321
+anchor_top = 0.037
+anchor_right = 0.389
+anchor_bottom = 0.094
+offset_left = 0.207977
+offset_top = -0.198999
+offset_right = -0.128021
+offset_bottom = -2.938
+theme_override_font_sizes/normal_font_size = 22
+text = "00:00"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Control2"]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.129187
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+horizontal_scroll_mode = 0
+metadata/_edit_use_anchors_ = true
+
+[node name="Tracks" type="VBoxContainer" parent="Control2/ScrollContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(1145, 550)
+layout_mode = 2
+theme_override_constants/separation = 5
 script = ExtResource("1_1u1v6")
 
-[node name="Button" type="Button" parent="Control2/VBoxContainer"]
+[node name="audio_track" parent="Control2/ScrollContainer/Tracks" instance=ExtResource("7_haib7")]
+layout_mode = 2
+theme = SubResource("Theme_24eif")
+
+[node name="Button" type="Button" parent="Control2/ScrollContainer/Tracks"]
 custom_minimum_size = Vector2(35, 20)
 layout_mode = 2
 size_flags_horizontal = 0
 text = "+"
 
-[connection signal="pressed" from="Control2/VBoxContainer/Button" to="Control2/VBoxContainer" method="_on_button_pressed"]
+[node name="head" type="TextureRect" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.197451
+anchor_top = 0.155864
+anchor_right = 0.197451
+anchor_bottom = 1.0
+offset_left = -5.46399
+offset_right = 0.536011
+texture = SubResource("GradientTexture2D_6jklg")
+script = ExtResource("8_fb53o")
+metadata/_edit_use_anchors_ = true
+
+[connection signal="toggled" from="Control2/Button" to="Control2/ScrollContainer/Tracks" method="_on_play_toggled"]
+[connection signal="pressed" from="Control2/ScrollContainer/Tracks/Button" to="Control2/ScrollContainer/Tracks" method="_on_button_pressed"]
+[connection signal="mouse_entered" from="head" to="head" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="head" to="head" method="_on_mouse_exited"]

@@ -1,0 +1,215 @@
+[gd_scene load_steps=12 format=3 uid="uid://dhvnso5gednqs"]
+
+[ext_resource type="Script" path="res://src/piste_audio/audiotrack.gd" id="1_s7ill"]
+[ext_resource type="Script" path="res://src/piste_audio/Button.gd" id="3_s1pdd"]
+[ext_resource type="Script" path="res://src/piste_audio/Button2.gd" id="4_6e0ue"]
+[ext_resource type="Shader" path="res://resources/shaders/visualizer.gdshader" id="4_wn3rl"]
+[ext_resource type="Script" path="res://src/piste_audio/ColorRect3.gd" id="5_d01yn"]
+[ext_resource type="Script" path="res://src/piste_audio/Start_time.gd" id="6_k8sd0"]
+[ext_resource type="Script" path="res://src/piste_audio/Anadata2.gd" id="6_wnfgv"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xwvbf"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_krxpp"]
+shader = ExtResource("4_wn3rl")
+shader_parameter/samples = null
+shader_parameter/n = null
+
+[sub_resource type="Gradient" id="Gradient_yffif"]
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_fffwb"]
+gradient = SubResource("Gradient_yffif")
+width = 5
+height = 1
+
+[node name="track" type="Control"]
+custom_minimum_size = Vector2(100, 115)
+layout_mode = 3
+anchor_right = 1.0
+anchor_bottom = 0.177
+offset_bottom = -0.696014
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_s7ill")
+
+[node name="ColorRect2" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.590894, 0.173532, 0.212569, 1)
+
+[node name="solo" type="Button" parent="ColorRect2"]
+layout_mode = 2
+anchor_left = 0.109
+anchor_top = 0.500087
+anchor_right = 0.179
+anchor_bottom = 0.769087
+offset_left = -0.568008
+offset_top = -0.0100021
+offset_right = -0.208008
+offset_bottom = 0.0550003
+grow_horizontal = 0
+size_flags_vertical = 8
+toggle_mode = true
+text = "Solo"
+script = ExtResource("3_s1pdd")
+metadata/_edit_use_anchors_ = true
+
+[node name="mute" type="Button" parent="ColorRect2"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.033
+anchor_top = 0.504435
+anchor_right = 0.102
+anchor_bottom = 0.78213
+offset_left = -0.0159988
+offset_top = -0.0100021
+offset_right = -0.504005
+offset_bottom = -0.945
+toggle_mode = true
+text = "Mute"
+script = ExtResource("4_6e0ue")
+metadata/_edit_use_anchors_ = true
+
+[node name="check_analysis_data" type="CheckButton" parent="ColorRect2"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.026
+anchor_top = 0.77
+anchor_right = 0.064
+anchor_bottom = 0.978
+offset_left = 0.0480003
+offset_top = -0.0499954
+offset_right = 0.271996
+offset_bottom = 0.0299988
+theme_override_styles/normal = SubResource("StyleBoxEmpty_xwvbf")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="ColorRect2/check_analysis_data"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_right = 4.227
+anchor_bottom = 1.0
+offset_right = 0.0119934
+text = "Edit analysis data"
+
+[node name="VSlider" type="VSlider" parent="."]
+layout_mode = 2
+anchor_top = 0.209
+anchor_right = 0.021
+anchor_bottom = 0.913
+offset_top = -0.0349998
+offset_right = -0.192001
+offset_bottom = 0.00499725
+min_value = -80.0
+max_value = 0.0
+step = 0.05
+value = -6.0
+
+[node name="ColorRect3" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_krxpp")
+layout_mode = 2
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 222.0
+color = Color(0.640372, 0.294444, 0.337633, 1)
+script = ExtResource("5_d01yn")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+
+[node name="AudioStreamPlayer2" type="AudioStreamPlayer" parent="."]
+
+[node name="Audio_text" type="RichTextLabel" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.033
+anchor_top = 0.07
+anchor_right = 0.179
+anchor_bottom = 0.609
+offset_left = -0.0159988
+offset_top = -4.05
+offset_right = -0.208008
+offset_bottom = -12.035
+theme_override_font_sizes/normal_font_size = 12
+bbcode_enabled = true
+text = "[center]No audio loaded!
+(drop an ogg vorbis or mp3 file to start)"
+
+[node name="Anadata" type="ColorRect" parent="."]
+visible = false
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.57391
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.768914, 0.369582, 0.557243, 1)
+
+[node name="Anadata2" type="ColorRect" parent="Anadata"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.193
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -0.335999
+offset_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.685747, 0.228835, 0.434485, 1)
+script = ExtResource("6_wnfgv")
+
+[node name="Start_time" type="TextureRect" parent="Anadata/Anadata2"]
+z_index = 1
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.192
+anchor_top = 0.552
+anchor_right = 0.199
+anchor_bottom = 0.985
+offset_left = 0.440002
+offset_top = 0.0161896
+offset_right = -0.0700073
+offset_bottom = 1.00534
+texture = SubResource("GradientTexture2D_fffwb")
+script = ExtResource("6_k8sd0")
+
+[node name="TextEdit" type="TextEdit" parent="Anadata"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.008
+anchor_top = 0.409
+anchor_right = 0.074
+anchor_bottom = 0.947
+offset_left = -0.216001
+offset_top = 0.00599861
+offset_right = -0.248001
+offset_bottom = 0.497997
+placeholder_text = "No BPM"
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Anadata"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.008
+anchor_right = 0.074
+anchor_bottom = 0.394
+offset_left = -0.216001
+offset_right = -0.248001
+offset_bottom = -0.00400162
+bbcode_enabled = true
+text = "[center]BPM"
+
+[connection signal="pressed" from="ColorRect2/solo" to="ColorRect2/solo" method="_on_pressed"]
+[connection signal="pressed" from="ColorRect2/mute" to="ColorRect2/mute" method="_on_pressed"]
+[connection signal="toggled" from="ColorRect2/check_analysis_data" to="." method="_on_check_analysis_data_toggled"]
+[connection signal="value_changed" from="VSlider" to="." method="_on_v_slider_value_changed"]
+[connection signal="mouse_entered" from="ColorRect3" to="." method="_on_color_rect_3_mouse_entered"]
+[connection signal="mouse_exited" from="ColorRect3" to="." method="_on_color_rect_3_mouse_exited"]
+[connection signal="mouse_entered" from="Anadata/Anadata2" to="Anadata/Anadata2" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="Anadata/Anadata2" to="Anadata/Anadata2" method="_on_mouse_exited"]
+[connection signal="mouse_entered" from="Anadata/Anadata2/Start_time" to="Anadata/Anadata2/Start_time" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="Anadata/Anadata2/Start_time" to="Anadata/Anadata2/Start_time" method="_on_mouse_exited"]
