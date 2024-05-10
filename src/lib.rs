@@ -6,9 +6,10 @@ mod generator;
 
 use godot::prelude::*;
 use num_traits::FromPrimitive;
+use utils::analysis_file::AnalysisData;
 use utils::notes::NoteNames;
 use utils::*;
-
+use generator::algorithms::markov::MarkovGenerator;
 struct MyExtension;
 
 #[gdextension]
@@ -17,11 +18,11 @@ unsafe impl ExtensionLibrary for MyExtension {}
 
 
 
-//Wrapper for godot of analysdata
+/// Wrapper for godot of analysdata
 #[derive(Debug)]
 #[derive(GodotClass)]
-#[class(no_init, base = RefCounted)]
-pub struct AnalysisData{
+#[class(init, base = RefCounted)]
+pub struct MusicAnalysisData{
     
     data: utils::analysis_file::AnalysisData,
 
@@ -31,7 +32,7 @@ pub struct AnalysisData{
 
 
 #[godot_api]
-impl IRefCounted for AnalysisData {
+impl IRefCounted for MusicAnalysisData {
 
     fn to_string(&self) -> GString {
 
@@ -44,7 +45,7 @@ impl IRefCounted for AnalysisData {
 
 }
 #[godot_api]
-impl AnalysisData{
+impl MusicAnalysisData{
     #[func]
     fn create(bpm: i64, notes:Array<i64>, root:i64, start_time:f64) -> Gd<Self>{
 
@@ -75,8 +76,45 @@ impl AnalysisData{
     }
 }
 
-// struct Algorithm{
+enum Algorithms {
+    MarkovGenerator,
+}
 
+#[derive(Debug)]
+#[derive(GodotClass)]
+#[class(no_init, base = RefCounted)]
+struct MusicGenerator{
+    #[var]
+    generator: Algorithms,
 
+    #[var]
+    ana_data: MusicAnalysisData,
 
-// }
+    base: Base<RefCounted>
+}
+
+#[godot_api]
+impl IRefCounted for MusicGenerator{
+
+}
+
+#[godot_api]
+impl MusicGenerator {
+
+    #[func]
+    fn create(data:AnalysisData, algo:GString) -> Self{
+
+        let generator = match &algo.to_string().to_lowercase(){
+
+            "markov" => Algorithms::MarkovGenerator,
+            _ => panic!("Not a valid algorithm name. Valid names are: 'markov'"),
+        };
+
+        Gd::from_init_fn(|base| {
+
+            Self {generator, ana_data:data, base}
+        })
+    }
+
+    
+}

@@ -12,3 +12,8 @@ var generation_calls = {}
 
 #scale objects in the UI
 var scales = []
+
+func _ready():
+	pass
+	
+	

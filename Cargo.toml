@@ -10,14 +10,12 @@ edition = "2021"
 crate-type = ["cdylib"]  # Compile this crate to a dynamic C library.
 
 [dependencies]
-godot = { git = "https://github.com/godot-rust/gdext", branch = "master"}
+godot = {git = "https://github.com/godot-rust/gdext", branch = "master"}
 fundsp = "0.17.1" #for general dsp
-#midir = "0.9.1" #for realtime midi processing
 midly = "0.5.3" #for offline midi processing
 num-traits = "0.2"
 num-derive = "0.4.2"
 pitch-detection = "0.3.0" #for pitch detection algorithm (remove if we end up doing our own!)
-
 rand = "0.8.5"
 anyhow = "1.0.82"
 
