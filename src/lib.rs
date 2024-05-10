@@ -9,8 +9,10 @@ use num_traits::FromPrimitive;
 use utils::analysis_file::AnalysisData;
 use utils::notes::NoteNames;
 use utils::*;
+use std::boxed::Box;
 use generator::algorithms::markov::MarkovGenerator;
 struct MyExtension;
+use notes::Generator;
 
 #[gdextension]
 unsafe impl ExtensionLibrary for MyExtension {}
@@ -21,7 +23,7 @@ unsafe impl ExtensionLibrary for MyExtension {}
 /// Wrapper for godot of analysdata
 #[derive(Debug)]
 #[derive(GodotClass)]
-#[class(init, base = RefCounted)]
+#[class(no_init, base = RefCounted)]
 pub struct MusicAnalysisData{
     
     data: utils::analysis_file::AnalysisData,
@@ -76,37 +78,28 @@ impl MusicAnalysisData{
     }
 }
 
-enum Algorithms {
-    MarkovGenerator,
-}
 
 #[derive(Debug)]
 #[derive(GodotClass)]
 #[class(no_init, base = RefCounted)]
 struct MusicGenerator{
-    #[var]
-    generator: Algorithms,
 
-    #[var]
+    generator: Box<dyn utils::notes::Generator>,
+
     ana_data: MusicAnalysisData,
 
     base: Base<RefCounted>
 }
 
 #[godot_api]
-impl IRefCounted for MusicGenerator{
-
-}
-
-#[godot_api]
 impl MusicGenerator {
 
     #[func]
-    fn create(data:AnalysisData, algo:GString) -> Self{
+    fn create(data:MusicAnalysisData, algo:GString) -> Gd<Self>{
 
-        let generator = match &algo.to_string().to_lowercase(){
+        let generator = match algo.to_string().to_lowercase().as_str(){
 
-            "markov" => Algorithms::MarkovGenerator,
+            "markov" => MarkovGenerator::new(data.data),
             _ => panic!("Not a valid algorithm name. Valid names are: 'markov'"),
         };
 
@@ -116,5 +109,71 @@ impl MusicGenerator {
         })
     }
 
-    
+    #[func]
+    fn generate(&mut self, start_time:f64, end_time:f64){
+
+        self.generator.generate(start_time, end_time);
+    }
+
+    fn get_notes(&self) -> Vec<MusicNote>{
+        MusicNote::from_vec(self.generator.get_notes_vec())
+    }
+
 }
+
+#[godot_api]
+impl IRefCounted for MusicGenerator {}
+
+#[derive(Debug)]
+#[derive(GodotClass)]
+#[class(no_init, base = RefCounted)]
+struct MusicNote{
+
+    #[var]
+    start_time:f64,
+
+    #[var]
+    end_time:f64,
+
+    #[var]
+    note:i64,
+
+    #[var]
+    octave:i64,
+
+    #[var]
+    velocity:i64,
+
+
+    base: Base<RefCounted>
+}
+
+
+
+#[godot_api]
+impl MusicNote {
+
+    #[func]
+    pub fn create(start_time:f64, end_time:f64, note:i64, octave:i64, velocity:i64) -> Gd<Self>{
+
+        Gd::from_init_fn(|base:Base<RefCounted>| {
+
+            Self {start_time, end_time, note, octave, velocity, base}
+        })
+    }
+
+    pub fn from_vec(v: &Vec<(notes::Note, f64, f64)>) -> Array<Gd<Self>>{
+        let mut res:Array<Gd<Self>>;
+
+        for i in v{
+
+            res.push(
+                Self::create(i.1, i.2, (i.0.note as u8).into(), i.0.octave.into(), (i.0.velocity as u8).into())
+            );
+        }
+        res
+    }
+}
+
+#[godot_api]
+impl IRefCounted for MusicNote {}

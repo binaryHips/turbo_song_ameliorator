@@ -8,7 +8,7 @@ use fundsp::hacker32::*;
 use pitch_detection::*;
 use std::time::{Duration, Instant};
 use utils::file_import;
-
+use utils::notes::Generator;
 
 fn main() {
     test_midi_gen_markov();

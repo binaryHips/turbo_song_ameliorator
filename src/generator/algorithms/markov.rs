@@ -6,30 +6,34 @@ use rand::Rng;
 
 pub struct MarkovGenerator
 {
-    melody : Vec<(notes::Note, f64, f64)>,
+    notes_vec : Vec<(notes::Note, f64, f64)>,
     analysis_data : analysis_file::AnalysisData,
 }
 
-impl MarkovGenerator
-{
+impl MarkovGenerator{
+
     pub fn new(analysis_data : analysis_file::AnalysisData) -> Self
     {
-        Self {melody : vec![], analysis_data : analysis_data}
+        Self {notes_vec : vec![], analysis_data : analysis_data}
+    }
+}
+
+impl notes::Generator for MarkovGenerator
+{
+
+    fn get_notes_vec(&self) -> &Vec<(notes::Note, f64, f64)>
+    {
+        return & (self.notes_vec);
     }
 
-    pub fn get_melody(self) -> Vec<(notes::Note, f64, f64)>
+    fn generate(&mut self, start_time : f64, end_time : f64)
     {
-        return self.melody;
+        self.notes_vec = create(&self.analysis_data, start_time, end_time);
     }
 
-    pub fn generate(&mut self, start_time : f64, end_time : f64)
+    fn midi_gen(&self, pathstring : &str)
     {
-        self.melody = create(&self.analysis_data, start_time, end_time);
-    }
-
-    pub fn midi_gen(self, pathstring : &str)
-    {
-        generator::midi_gen::midi_generator(&self.melody, &self.analysis_data, pathstring);
+        generator::midi_gen::midi_generator(&self.notes_vec, &self.analysis_data, pathstring);
     }
 }
 
@@ -92,9 +96,9 @@ fn create(ana_file : &analysis_file::AnalysisData, start_time : f64, end_time : 
     let list_rhythm : Vec<f64> = markov_rhythm(nbt, 4, dureet, &rhythm_prob_simple);
     let nbn : i32 = list_rhythm.len() as i32;      // nombre de notes
     let list_notes : Vec<notes::Note> = markov_notes(nbn, &note_prob_simple);
-    let mut melody : Vec<(notes::Note, f64, f64)> = construct_melody(list_rhythm, list_notes);
-    scaling(&mut melody, &ana_file);
-    return melody;
+    let mut notes_vec : Vec<(notes::Note, f64, f64)> = construct_notes_vec(list_rhythm, list_notes);
+    scaling(&mut notes_vec, &ana_file);
+    return notes_vec;
 }
 
 
@@ -169,24 +173,24 @@ fn markov_notes(nbn : i32, tab : &Vec<Vec<f64>>) -> Vec<notes::Note>
 
 /// Assemble la suite de note et de rythme pour en faire une mélodie.
 /// Retourne la mélodie sous la forme d'un vecteur de triplet (note, instant de début, instant de fin).
-fn construct_melody(list_rhythm : Vec<f64>, list_notes : Vec<notes::Note>) -> Vec<(notes::Note, f64, f64)>
+fn construct_notes_vec(list_rhythm : Vec<f64>, list_notes : Vec<notes::Note>) -> Vec<(notes::Note, f64, f64)>
 {
-    let mut melody : Vec<(notes::Note, f64, f64)> = vec![];
+    let mut notes_vec : Vec<(notes::Note, f64, f64)> = vec![];
     let mut instant  : f64 = 0.0;
     for i in 0..list_rhythm.len()
     {
-        if list_notes[i].velocity != 0 {melody.push((list_notes[i], instant, instant+list_rhythm[i]));}
+        if list_notes[i].velocity != 0 {notes_vec.push((list_notes[i], instant, instant+list_rhythm[i]));}
         instant += list_rhythm[i];
     }
-    return melody;
+    return notes_vec;
 }
 
 
-/// Récupère la mélodie générée par construct_melody() et ajuste chaque note à la gamme supposé du fichier d'analyse.
+/// Récupère la mélodie générée par construct_notes_vec() et ajuste chaque note à la gamme supposé du fichier d'analyse.
 /// Pas de retour.
-fn scaling(melody : &mut Vec<(notes::Note, f64, f64)>, anafile : &analysis_file::AnalysisData)
+fn scaling(notes_vec : &mut Vec<(notes::Note, f64, f64)>, anafile : &analysis_file::AnalysisData)
 {
-    for song in melody {
+    for song in notes_vec {
         song.0.quantize_to_scale(&anafile.scale);
     }
 }

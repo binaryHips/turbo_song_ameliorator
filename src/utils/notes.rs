@@ -1,4 +1,5 @@
 use std::fmt;
+use std::fmt::Debug;
 use num_derive::FromPrimitive;    
 use num_traits::FromPrimitive;
 use midly::num;
@@ -15,7 +16,7 @@ impl From<i32> for NoteNames {
         FromPrimitive::from_i32((n) % 12).unwrap()
     }
 }
-impl std::fmt::Debug for NoteNames{
+impl Debug for NoteNames{
 
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> Result<(), std::fmt::Error>{
 
@@ -90,5 +91,23 @@ impl Scale{
 
     pub fn get_relative(&self, n:i32) -> NoteNames{
         return FromPrimitive::from_i32((n + self.root as i32) % 12).unwrap();
+    }
+}
+
+pub trait Generator {
+
+    fn get_notes_vec(&self) -> &Vec<(Note, f64, f64)>;
+
+
+    fn generate(&mut self, start_time : f64, end_time : f64);
+
+
+    fn midi_gen(&self, pathstring : &str);
+}
+
+impl Debug for dyn Generator{
+
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        write!(f, "Generator(Current content: {:?})", &self.get_notes_vec())
     }
 }
