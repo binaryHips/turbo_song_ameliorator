@@ -7,7 +7,7 @@ use godot::prelude::*;
 
 
 
-#[derive(FromPrimitive, Copy, Clone, Debug, Default)]
+#[derive(FromPrimitive, Copy, Clone, Default)]
 pub enum NoteNames {#[default] A, Ad, B, C, Cd, D, Dd, E, F, Fd, G, Gd, SILENCE}
 
 impl From<i32> for NoteNames {
@@ -15,9 +15,16 @@ impl From<i32> for NoteNames {
         FromPrimitive::from_i32((n) % 12).unwrap()
     }
 }
+impl std::fmt::Debug for NoteNames{
+
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> Result<(), std::fmt::Error>{
+
+        write!(f, "{}", NOTES_STR[*self as usize])
+    }
+}
 
 const NOTES_STR:[&str; 13] = ["A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "silence"];
-
+ 
 ///A simple musical note.
 /// 
 #[derive(Copy, Clone)]

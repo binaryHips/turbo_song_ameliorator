@@ -16,6 +16,8 @@ unsafe impl ExtensionLibrary for MyExtension {}
 
 
 
+
+//Wrapper for godot of analysdata
 #[derive(Debug)]
 #[derive(GodotClass)]
 #[class(no_init, base = RefCounted)]
@@ -27,9 +29,20 @@ pub struct AnalysisData{
 
 }
 
-//impl block for godot
+
 #[godot_api]
-impl IRefCounted for AnalysisData {}
+impl IRefCounted for AnalysisData {
+
+    fn to_string(&self) -> GString {
+
+        let mut s:String = "AnalysisData[\n".to_string();
+        s.push_str(&format!("\tbpm: {}\n", &self.data.bpm));
+        s.push_str(&format!("\troot note: {:?}\n", &self.data.scale.root));
+        s.push_str(&format!("\tnotes: {:?}\n", &self.data.scale.notes));
+        s.into()
+    }
+
+}
 #[godot_api]
 impl AnalysisData{
     #[func]
@@ -60,5 +73,10 @@ impl AnalysisData{
    
         })
     }
-
 }
+
+// struct Algorithm{
+
+
+
+// }
