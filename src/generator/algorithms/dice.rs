@@ -35,22 +35,19 @@ MusicalDiceGenerator
 }
 
 
-/// nbDes correspond au nombre de faces du dé que l'on lance = nombres de morceaux musicaux disponibles.
-/// nbMorceaux correspond au nombre de fois où on lance le dé.
-fn fonction_listeDes(nbDes:i32,nbMorceaux : i32) -> Vec<i32>{
+// nbFace correspond au nombre de faces du dé que l'on lance = nombres de morceaux musicaux disponibles.
+// nbDice correspond au nombre de fois où on lance le dé.
+fn roll_dice(nbFace : i32, nbDice : i32) -> Vec<i32>{
     let mut listeDes : Vec<i32> = vec![];
-    for i in 0..nbMorceaux {
-        let proba = rand::thread_rng(); 
-        let mut cpt : i32 = 1;
-        while proba < (cpt* 1/nbDes){
-            cpt = cpt+1;
-        }
-        listeDes.push(cpt-1);
+    let rng = rand::thread_rng();
+    for i in 0..nbDice {
+        let res : i32 = rng.gen_range(0..nbFace);
+        listeDes.push(res);
     }
     return listeDes;
 }
 
-/// & ou pas ?
+// & ou pas ?
 fn desMusicaux (musique : &str, cheminDossierMusique : &str){  
     let mut cpt = 0;
     for entry in fs::read_dir(cheminDossierMusique)? {
@@ -63,16 +60,16 @@ fn desMusicaux (musique : &str, cheminDossierMusique : &str){
     for event in track{
         deltaM = deltaM + event.delta;
     }
-    let mut nbMorceaux = 0;
+    let mut nbDice = 0;
     let quotient = deltaM % 4;
     let deltaM = deltaM - quotient;
     if quotient != 0 {
-        nbMorceaux = deltaM/4 +1;
+        nbDice = deltaM/4 +1;
     }
     else {
-        nbMorceaux = deltaM/4;
+        nbDice = deltaM/4;
     }
-    let mut listeDes = fonction_listeDes(cpt,nbMorceaux);
+    let mut listeDes = roll_dice(cpt,nbDice);
     let mut debut = 0;
     let mut fin = 4;
     let mut trackSortie: Vec<TrackEvent>; 
@@ -111,7 +108,7 @@ fn desMusicaux (musique : &str, cheminDossierMusique : &str){
                             if notes_in_scale != notes_in_scale0 {
                                 for i in 0..127 {
                                     while notes_in_scale[i] != 0 {
-                                        trackSortie.push(TrackEvent{delta : num::u28::new(0 as u32), kind : TrackEventKind::Midi{channel: num::u4::new(0 as u8), message::MidiMessage::NoteOff{key: i, vel :0}}});
+                                        trackSortie.push(TrackEvent{delta : num::u28::new(0 as u32), kind : TrackEventKind::Midi{channel: num::u4::new(0 as u8), message : message::MidiMessage::NoteOff{key: i, vel :0}}});
                                         notes_in_scale[key]= notes_in_scale[key]-1;
                                     }
                                 }
@@ -128,21 +125,6 @@ fn desMusicaux (musique : &str, cheminDossierMusique : &str){
         debut = debut +4;
         fin = fin +4 
     }
-}
-
-
-/// Assemble la suite de note et de rythme pour en faire une mélodie.
-/// Retourne la mélodie sous la forme d'un vecteur de triplet (note, instant de début, instant de fin).
-fn construct_melody(list_rhythm : Vec<f64>, list_notes : Vec<notes::Note>) -> Vec<(notes::Note, f64, f64)>
-{
-    let mut melody : Vec<(notes::Note, f64, f64)> = vec![];
-    let mut instant  : f64 = 0.0;
-    for i in 0..list_rhythm.len()
-    {
-        if list_notes[i].velocity != 0 {melody.push((list_notes[i], instant, instant+list_rhythm[i]));}
-        instant += list_rhythm[i];
-    }
-    return melody;
 }
 
 
