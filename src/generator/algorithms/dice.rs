@@ -11,8 +11,7 @@ pub struct MusicalDiceGenerator
     pathstring : &str,
 }
 
-impl 
-MusicalDiceGenerator
+impl MusicalDiceGenerator
 {
     pub fn new(analysis_data : analysis_file::AnalysisData, pathstring : &str) -> Self
     {
@@ -24,7 +23,7 @@ MusicalDiceGenerator
         return self.melody;
     }
 
-    pub fn set_pathstring(pathstring : &str)
+    pub fn set_pathstring(&mut self, pathstring : &str)
     {
         self.pathstring = pathstring;
     }

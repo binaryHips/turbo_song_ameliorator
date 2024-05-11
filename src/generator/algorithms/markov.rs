@@ -23,7 +23,7 @@ impl MarkovGenerator
         return self.melody;
     }
 
-    pub fn set_pathstring(pathstring : &str)
+    pub fn set_pathstring(&mut self, pathstring : &str)
     {
         self.pathstring = pathstring;
     }
