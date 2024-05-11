@@ -8,14 +8,13 @@ pub struct MarkovGenerator
 {
     melody : Vec<(notes::Note, f64, f64)>,
     analysis_data : analysis_file::AnalysisData,
-    pathstring : &str,
 }
 
 impl MarkovGenerator
 {
-    pub fn new(analysis_data : analysis_file::AnalysisData, pathstring : &str) -> Self
+    pub fn new(analysis_data : analysis_file::AnalysisData) -> Self
     {
-        Self {melody : vec![], analysis_data : analysis_data, pathstring : pathstring}
+        Self {melody : vec![], analysis_data : analysis_data}
     }
 
     pub fn get_melody(self) -> Vec<(notes::Note, f64, f64)>
@@ -23,19 +22,14 @@ impl MarkovGenerator
         return self.melody;
     }
 
-    pub fn set_pathstring(&mut self, pathstring : &str)
-    {
-        self.pathstring = pathstring;
-    }
-
     pub fn generate(&mut self, start_time : f64, end_time : f64)
     {
         self.melody = create(&self.analysis_data, start_time, end_time);
     }
 
-    pub fn midi_gen(self)
+    pub fn midi_gen(self, pathstring : &str)
     {
-        generator::midi_gen::midi_generator(&self.melody, &self.analysis_data, self.pathstring);
+        generator::midi_gen::midi_generator(&self.melody, &self.analysis_data, pathstring);
     }
 }
 
