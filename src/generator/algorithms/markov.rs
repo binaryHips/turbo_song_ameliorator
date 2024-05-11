@@ -8,13 +8,14 @@ pub struct MarkovGenerator
 {
     melody : Vec<(notes::Note, f64, f64)>,
     analysis_data : analysis_file::AnalysisData,
+    pathstring : &str,
 }
 
 impl MarkovGenerator
 {
-    pub fn new(analysis_data : analysis_file::AnalysisData) -> Self
+    pub fn new(analysis_data : analysis_file::AnalysisData, pathstring : &str) -> Self
     {
-        Self {melody : vec![], analysis_data : analysis_data}
+        Self {melody : vec![], analysis_data : analysis_data, pathstring : pathstring}
     }
 
     pub fn get_melody(self) -> Vec<(notes::Note, f64, f64)>
@@ -22,14 +23,19 @@ impl MarkovGenerator
         return self.melody;
     }
 
+    pub fn set_pathstring(pathstring : &str)
+    {
+        self.pathstring = pathstring;
+    }
+
     pub fn generate(&mut self, start_time : f64, end_time : f64)
     {
         self.melody = create(&self.analysis_data, start_time, end_time);
     }
 
-    pub fn midi_gen(self, pathstring : &str)
+    pub fn midi_gen(self)
     {
-        generator::midi_gen::midi_generator(&self.melody, &self.analysis_data, pathstring);
+        generator::midi_gen::midi_generator(&self.melody, &self.analysis_data, self.pathstring);
     }
 }
 
@@ -37,7 +43,7 @@ impl MarkovGenerator
 /// Génère aléatoirement une mélodie basée sur des probabilités, sur une portion d'une musique, à partir de données analysées sur la musique.
 /// Renvoie une mélodie sous la forme d'un vecteur songs représentés par une Note (à l'intensité nulle pour les silences),
 /// un instant de début et un de fin en seconde codées sur deux flottants sur 64 bits. (Les notes commencent à l'instant 0)
-fn create(ana_file : &analysis_file::AnalysisData, start_time : f64, end_time : f64) -> Vec<(notes::Note, f64, f64)>
+fn create(analysis_data : &analysis_file::AnalysisData, start_time : f64, end_time : f64) -> Vec<(notes::Note, f64, f64)>
 {
     let rhythm_prob : Vec<Vec<f64>> = vec![
         vec![0.23266745005875442, 0.4336075205640423, 0.0564042303172738, 0.2773207990599295], 
@@ -83,8 +89,8 @@ fn create(ana_file : &analysis_file::AnalysisData, start_time : f64, end_time : 
     vec![0.2727272727272727, 0.6060606060606061, 0.0, 0.12121212121212122],
     vec![0.5, 0.45454545454545453, 0.0, 0.045454545454545456]
     ];
-    let dureet : f64 = 60.0/(ana_file.bpm as f64);        // durée d'un temp en seconde
-    let mut start_temp  : f64 = ana_file.start_time;
+    let dureet : f64 = 60.0/(analysis_data.bpm as f64);        // durée d'un temp en seconde
+    let mut start_temp  : f64 = analysis_data.start_time;
     while start_temp < start_time {start_temp += dureet;}
     let mut end_temp  : f64 = start_temp;
     while end_temp < end_time {end_temp += dureet;}
@@ -93,7 +99,7 @@ fn create(ana_file : &analysis_file::AnalysisData, start_time : f64, end_time : 
     let nbn : i32 = list_rhythm.len() as i32;      // nombre de notes
     let list_notes : Vec<notes::Note> = markov_notes(nbn, &note_prob_simple);
     let mut melody : Vec<(notes::Note, f64, f64)> = construct_melody(list_rhythm, list_notes);
-    scaling(&mut melody, &ana_file);
+    scaling(&mut melody, &analysis_data);
     return melody;
 }
 

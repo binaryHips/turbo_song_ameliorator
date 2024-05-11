@@ -8,14 +8,15 @@ pub struct MusicalDiceGenerator
 {
     melody : Vec<(notes::Note, f64, f64)>,
     analysis_data : analysis_file::AnalysisData,
+    pathstring : &str,
 }
 
 impl 
 MusicalDiceGenerator
 {
-    pub fn new(analysis_data : analysis_file::AnalysisData) -> Self
+    pub fn new(analysis_data : analysis_file::AnalysisData, pathstring : &str) -> Self
     {
-        Self {melody : vec![], analysis_data : analysis_data}
+        Self {melody : vec![], analysis_data : analysis_data, pathstring : pathstring}
     }
 
     pub fn get_melody(self) -> Vec<(notes::Note, f64, f64)>
@@ -23,14 +24,19 @@ MusicalDiceGenerator
         return self.melody;
     }
 
-    pub fn generate(&mut self, start_time : f64, end_time : f64)
+    pub fn set_pathstring(pathstring : &str)
     {
-        self.melody = create(&self.analysis_data, start_time, end_time);
+        self.pathstring = pathstring;
     }
 
-    pub fn midi_gen(self, pathstring : &str)
+    pub fn generate(&mut self, start_time : f64, end_time : f64)
     {
-        generator::midi_gen::midi_generator(&self.melody, &self.analysis_data, pathstring);
+        self.melody = create(&self.analysis_data, start_time, end_time, self.pathstring);
+    }
+
+    pub fn midi_gen(self)
+    {
+        generator::midi_gen::midi_generator(&self.melody, &self.analysis_data, self.pathstring);
     }
 }
 
@@ -48,9 +54,10 @@ fn roll_dice(nbFace : i32, nbDice : i32) -> Vec<i32>{
 }
 
 // & ou pas ?
-fn desMusicaux (musique : &str, cheminDossierMusique : &str){  
+fn create(analysis_data : &analysis_file::AnalysisData, start_time : f64, end_time : f64, pathstring : &str) -> Vec<(notes::Note, f64, f64)>
+{  
     let mut cpt = 0;
-    for entry in fs::read_dir(cheminDossierMusique)? {
+    for entry in fs::read_dir(pathstring)? {
         cpt = cpt +1
     }
     let bytesM:Vec<u8> = fs::read(musique).unwrap();
@@ -75,7 +82,7 @@ fn desMusicaux (musique : &str, cheminDossierMusique : &str){
     let mut trackSortie: Vec<TrackEvent>; 
     for i in listeDes {
         cpt = 0;
-        for entry in fs::read_dir(cheminDossierMusique)?{
+        for entry in fs::read_dir(pathstring)?{
             if cpt == i {
                 let bytes:Vec<u8> = fs::read(entry).unwrap();
                 let smf = Smf::parse(&bytes).unwrap();
