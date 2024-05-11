@@ -13,9 +13,9 @@ pub struct MusicalDiceGenerator
 
 impl MusicalDiceGenerator
 {
-    pub fn new(analysis_data : analysis_file::AnalysisData, pathstring : &str) -> Self
+    pub fn new(analysis_data : analysis_file::AnalysisData) -> Self
     {
-        Self {melody : vec![], analysis_data : analysis_data, pathstring : pathstring}
+        Self {melody : vec![], analysis_data : analysis_data}
     }
 
     pub fn get_melody(self) -> Vec<(notes::Note, f64, f64)>
@@ -23,7 +23,7 @@ impl MusicalDiceGenerator
         return self.melody;
     }
 
-    pub fn set_pathstring(&mut self, pathstring : &str)
+    pub fn set_pathstring(self, pathstring : &str)
     {
         self.pathstring = pathstring;
     }
@@ -33,9 +33,9 @@ impl MusicalDiceGenerator
         self.melody = create(&self.analysis_data, start_time, end_time, self.pathstring);
     }
 
-    pub fn midi_gen(self)
+    pub fn midi_gen(self, pathstring : &str)
     {
-        generator::midi_gen::midi_generator(&self.melody, &self.analysis_data, self.pathstring);
+        generator::midi_gen::midi_generator(&self.melody, &self.analysis_data, pathstring);
     }
 }
 
@@ -54,10 +54,10 @@ fn roll_dice(nbFace : i32, nbDice : i32) -> Vec<i32>{
 
 // & ou pas ?
 fn create(analysis_data : &analysis_file::AnalysisData, start_time : f64, end_time : f64, pathstring : &str) -> Vec<(notes::Note, f64, f64)>
-{  
-    let mut cpt = 0;
+{ 
+    let mut nbMusique = 0;
     for entry in fs::read_dir(pathstring)? {
-        cpt = cpt +1
+        nbMusique = nbMusique +1
     }
     let bytesM:Vec<u8> = fs::read(musique).unwrap();
     let smfM = Smf::parse(&bytesM).unwrap();
@@ -75,14 +75,14 @@ fn create(analysis_data : &analysis_file::AnalysisData, start_time : f64, end_ti
     else {
         nbDice = deltaM/4;
     }
-    let mut listeDes = roll_dice(cpt,nbDice);
+    let mut listeDes = roll_dice(nbMusique, nbDice);
     let mut debut = 0;
     let mut fin = 4;
     let mut trackSortie: Vec<TrackEvent>; 
     for i in listeDes {
-        cpt = 0;
+        nbMusique = 0;
         for entry in fs::read_dir(pathstring)?{
-            if cpt == i {
+            if nbMusique == i {
                 let bytes:Vec<u8> = fs::read(entry).unwrap();
                 let smf = Smf::parse(&bytes).unwrap();
                 let track = smf.tracks[0];
@@ -126,7 +126,7 @@ fn create(analysis_data : &analysis_file::AnalysisData, start_time : f64, end_ti
                     
                 }
             }
-            cpt = cpt +1;
+            nbMusique = nbMusique +1;
         }
         debut = debut +4;
         fin = fin +4 
