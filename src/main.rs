@@ -21,9 +21,9 @@ fn test_midi_gen_markov()
     file_import::save_wav32(&wave, "./assets/generation/theme.wav");
     let scale : utils::notes::Scale = utils::notes::Scale{notes : vec![utils::notes::NoteNames::A, utils::notes::NoteNames::B, utils::notes::NoteNames::C, utils::notes::NoteNames::D, utils::notes::NoteNames::E, utils::notes::NoteNames::F, utils::notes::NoteNames::G], root : utils::notes::NoteNames::A};
     let analysis_data : utils::analysis_file::AnalysisData = utils::analysis_file::AnalysisData{bpm : 120 as usize, scale : scale, start_time : 0.0};
+    let pathstring : &str = "./assets/generation/test_make_melody.mid";
     let mut mark_gen : generator::algorithms::markov::MarkovGenerator = generator::algorithms::markov::MarkovGenerator::new(analysis_data);
     mark_gen.generate(0.0, 20.0);
-    let pathstring : &str = "./assets/generation/test_make_melody.mid";
     mark_gen.midi_gen(pathstring);
 }
 
