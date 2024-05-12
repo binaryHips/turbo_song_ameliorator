@@ -16,18 +16,19 @@ impl MusicalDiceGenerator
     {
         Self {melody : vec![], analysis_data : analysis_data}
     }
-
-    pub fn get_melody(self) -> Vec<(notes::Note, f64, f64)>
+}
+impl notes::Generator for MusicalDiceGenerator{
+    fn get_notes_vec(&self) -> &Vec<(notes::Note, f64, f64)>
     {
-        return self.melody;
+        return &self.melody;
     }
 
-    pub fn generate(&mut self, start_time : f64, end_time : f64)
+    fn generate(&mut self, start_time : f64, end_time : f64)
     {
         self.melody = create(&self.analysis_data, start_time, end_time);
     }
 
-    pub fn midi_gen(self, PATHSTRING : &str)
+    fn midi_gen(&self, PATHSTRING : &str)
     {
         generator::midi_gen::midi_generator(&self.melody, &self.analysis_data, PATHSTRING);
     }

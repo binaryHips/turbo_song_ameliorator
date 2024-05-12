@@ -12,6 +12,7 @@ use utils::*;
 use std::boxed::Box;
 use std::ops::Deref;
 use generator::algorithms::markov::MarkovGenerator;
+use generator::algorithms::dice::MusicalDiceGenerator;
 struct MyExtension;
 use notes::Generator;
 
@@ -139,6 +140,7 @@ impl MusicGenerator {
         let generator:Box<dyn Generator> = match algo.to_string().to_lowercase().as_str(){
 
             "markov" => Box::new(MarkovGenerator::new(data.bind().data.clone())),
+            "dice" => Box::new(MusicalDiceGenerator::new(data.bind().data.clone())),
             _ => panic!("Not a valid algorithm name. Valid names are: 'markov'"),
         };
 

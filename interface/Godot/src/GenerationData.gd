@@ -2,7 +2,7 @@ extends Node
 
 var tracks_manager:Node
 
-var algorithms = ["Markov", "Alt. Markov"]
+var algorithms = ["Markov", "dice"]
 
 var instruments = ["Sine"]
 

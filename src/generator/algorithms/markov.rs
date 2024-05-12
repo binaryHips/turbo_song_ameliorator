@@ -97,7 +97,7 @@ fn create(analysis_data : &analysis_file::AnalysisData, start_time : f64, end_ti
     let nbn : i32 = list_rhythm.len() as i32;      // nombre de notes
     let list_notes : Vec<notes::Note> = markov_notes(nbn, &note_prob_simple);
     let mut notes_vec : Vec<(notes::Note, f64, f64)> = construct_notes_vec(list_rhythm, list_notes);
-    scaling(&mut notes_vec, &ana_file);
+    scaling(&mut notes_vec, &analysis_data);
     return notes_vec;
 }
 
