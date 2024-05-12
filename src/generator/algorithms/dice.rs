@@ -8,14 +8,13 @@ pub struct MusicalDiceGenerator
 {
     melody : Vec<(notes::Note, f64, f64)>,
     analysis_data : analysis_file::AnalysisData,
-    pathstring : &str,
 }
 
 impl MusicalDiceGenerator
 {
     pub fn new(analysis_data : analysis_file::AnalysisData) -> Self
     {
-        Self {melody : vec![], analysis_data : analysis_data, pathstring : "none"}
+        Self {melody : vec![], analysis_data : analysis_data}
     }
 
     pub fn get_melody(self) -> Vec<(notes::Note, f64, f64)>
@@ -23,19 +22,14 @@ impl MusicalDiceGenerator
         return self.melody;
     }
 
-    pub fn set_pathstring(self, pathstring : &str)
-    {
-        self.pathstring = pathstring;
-    }
-
     pub fn generate(&mut self, start_time : f64, end_time : f64)
     {
-        self.melody = create(&self.analysis_data, start_time, end_time, self.pathstring);
+        self.melody = create(&self.analysis_data, start_time, end_time);
     }
 
-    pub fn midi_gen(self, pathstring : &str)
+    pub fn midi_gen(self, PATHSTRING : &str)
     {
-        generator::midi_gen::midi_generator(&self.melody, &self.analysis_data, pathstring);
+        generator::midi_gen::midi_generator(&self.melody, &self.analysis_data, PATHSTRING);
     }
 }
 
@@ -53,12 +47,13 @@ fn roll_dice(nbFace : i32, nbDice : i32) -> Vec<i32>{
 }
 
 // & ou pas ?
-fn create(analysis_data : &analysis_file::AnalysisData, start_time : f64, end_time : f64, pathstring : &str) -> Vec<(notes::Note, f64, f64)>
+fn create(analysis_data : &analysis_file::AnalysisData, start_time : f64, end_time : f64) -> Vec<(notes::Note, f64, f64)>
 {
+    const PATHSTRING : &str = "./MIDIS";
     const BPM_MUSIC : i32 = 120;
     const NBT_DE : i32 = 4;         // nombre de temps par dé lancé
     let mut nbMusic = 0;
-    for entry in fs::read_dir(pathstring) {
+    for entry in fs::read_dir(PATHSTRING) {
         nbMusic = nbMusic +1
     }
     let dureet : f64 = 60.0/(analysis_data.bpm as f64);        // durée d'un temp en seconde
@@ -74,17 +69,17 @@ fn create(analysis_data : &analysis_file::AnalysisData, start_time : f64, end_ti
     let mut fin = (NBT_DE as f64)*dureet;
     let mut melody : Vec<(notes::Note, f64, f64)> = vec![];
     let mut taille_melody : i32 = 0;
-    let mut notes_pressed = vec![-1; 128];
+    let notes_pressed  = &mut vec![-1; 128];
     for i in listeDes
     {
         nbMusic = 0;
-        for entry in fs::read_dir(pathstring)
+        for entry in fs::read_dir(PATHSTRING).unwrap()
         {
             if nbMusic == i
             {
-                let bytes:Vec<u8> = fs::read(entry).unwrap();
+                let bytes:Vec<u8> = fs::read((entry.unwrap()).path()).unwrap();
                 let smf = Smf::parse(&bytes).unwrap();
-                let track = smf.tracks[0 as usize];
+                let track = &smf.tracks[0];
                 let mut delta = 0.0;
                 for track_event in track{
                     if delta>=debut && delta<fin
@@ -146,12 +141,12 @@ fn create(analysis_data : &analysis_file::AnalysisData, start_time : f64, end_ti
                     }
                     delta += (track_event.delta.as_int() as f64)*(BPM_MUSIC as f64)/(analysis_data.bpm as f64);
                 }
-                for pos in notes_pressed
+                for pos in (&mut *notes_pressed).into_iter()
                 {
-                    if pos != -1
+                    if *pos != -1
                     {
-                        melody[pos as usize].2 = end_temp-start_temp;
-                        notes_pressed[pos as usize] = -1;
+                        melody[(*pos) as usize].2 = end_temp-start_temp;
+                        *pos = -1;
                     }
                 }
                 break;
