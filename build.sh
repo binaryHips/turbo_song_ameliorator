@@ -1,8 +1,8 @@
 
 cargo build --lib
-cargo build --target x86_64-pc-windows-gnu
+cargo build --lib --target x86_64-pc-windows-gnu
 
 
 
 cargo build --lib --release
-cargo build --target x86_64-pc-windows-gnu --release
+cargo build --lib --target x86_64-pc-windows-gnu --release

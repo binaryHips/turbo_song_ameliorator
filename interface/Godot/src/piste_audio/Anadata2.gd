@@ -2,6 +2,7 @@ extends ColorRect
 
 const SCALE = preload("res://src/scale/scale.tscn")
 
+@onready var bpm = get_parent().get_node("bpm")
 var mouse_in := false
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -31,8 +32,24 @@ func _input(event):
 		for c in get_children():
 			if c.mouse_in: return
 		
-		var scale = SCALE.instantiate()
+		# Put that back in when multiple scales are supported
+		#var scale = SCALE.instantiate()
 		
-		scale.position.x = get_local_mouse_position().x
-		add_child(scale)
+		#scale.position.x = get_local_mouse_position().x
+		#add_child(scale)
 	
+
+
+func _on_bpm_text_set():
+	var v:String = bpm.text
+	if v.is_valid_int():
+	
+		GenerationData.anaData = MusicAnalysisData.create(
+			int(bpm.text),
+			GenerationData.anaData.get_scale_notes(),
+			GenerationData.anaData.get_scale_root(),
+			GenerationData.anaData.get_time_before_start()
+			
+		)
+		
+		print("BPM ", GenerationData.anaData.get_bpm())

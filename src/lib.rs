@@ -10,6 +10,7 @@ use utils::analysis_file::AnalysisData;
 use utils::notes::NoteNames;
 use utils::*;
 use std::boxed::Box;
+use std::ops::Deref;
 use generator::algorithms::markov::MarkovGenerator;
 struct MyExtension;
 use notes::Generator;
@@ -44,18 +45,20 @@ impl IRefCounted for MusicAnalysisData {
         s.push_str(&format!("\tnotes: {:?}\n", &self.data.scale.notes));
         s.into()
     }
-
 }
+
 #[godot_api]
 impl MusicAnalysisData{
     #[func]
-    fn create(bpm: i64, notes:Array<i64>, root:i64, start_time:f64) -> Gd<Self>{
+    fn create(bpm: i64, notes:Array<i64>, root:i64, start_time:f64) -> Gd<MusicAnalysisData>{
 
         //sanity check
-        if !notes.iter_shared().all(|x| x >= 0 && x < 12) || root < 0 || root >= 12{
-            panic!("Notes must be in the range [[0,11]]")
+        if (notes.iter_shared().all(|x| x < 0 && x >= 12)) || root < 0 || root >= 12{
+            godot_error!("Notes must be in the range [[0,11]]");
+            panic!("Notes must be in the range [[0,11]]");
         }
 
+        godot_print!("sanity check passed");
         let mut notes_vec:Vec<notes::NoteNames> = vec![];
 
         for n in notes.iter_shared(){
@@ -76,6 +79,42 @@ impl MusicAnalysisData{
    
         })
     }
+
+    #[func]
+    fn create_from_file(pathstring:GString) -> Gd<MusicAnalysisData>{
+
+        let wave = file_import::import_wav32(pathstring.to_string().as_str());
+
+        let bpm = analyser::rhythm_analysis::find_wave_bpm(&wave);
+        let start_time = analyser::rhythm_analysis::find_wave_first_instant(&wave, bpm);
+        let scale = analyser::tonal_analysis::get_minor_scale(&wave);
+
+        Gd::from_init_fn(|base| {
+
+            Self {
+                data: utils::analysis_file::AnalysisData {bpm:bpm as usize, scale, start_time},
+                base
+            }
+   
+        })
+    }
+
+    #[func]
+    fn get_time_before_start(&self) -> f64{
+        self.data.start_time
+    }
+    #[func]
+    fn get_scale_root(&self) -> i64{
+        (self.data.scale.root as u8).into()
+    }
+    #[func]
+    fn get_scale_notes(&self) -> Array<i64>{
+        (self.data.scale.notes).iter().map(|x| *x as i64).collect()
+    }
+    #[func]
+    fn get_bpm(&self) ->i64{
+        self.data.bpm as i64
+    }
 }
 
 
@@ -86,7 +125,7 @@ struct MusicGenerator{
 
     generator: Box<dyn utils::notes::Generator>,
 
-    ana_data: MusicAnalysisData,
+    ana_data: Gd<MusicAnalysisData>,
 
     base: Base<RefCounted>
 }
@@ -95,11 +134,11 @@ struct MusicGenerator{
 impl MusicGenerator {
 
     #[func]
-    fn create(data:MusicAnalysisData, algo:GString) -> Gd<Self>{
+    fn create(data:Gd<MusicAnalysisData>, algo:GString) -> Gd<MusicGenerator>{
 
-        let generator = match algo.to_string().to_lowercase().as_str(){
+        let generator:Box<dyn Generator> = match algo.to_string().to_lowercase().as_str(){
 
-            "markov" => MarkovGenerator::new(data.data),
+            "markov" => Box::new(MarkovGenerator::new(data.bind().data.clone())),
             _ => panic!("Not a valid algorithm name. Valid names are: 'markov'"),
         };
 
@@ -114,8 +153,9 @@ impl MusicGenerator {
 
         self.generator.generate(start_time, end_time);
     }
-
-    fn get_notes(&self) -> Vec<MusicNote>{
+    
+    #[func]
+    fn get_notes(&self) -> Array<Gd<MusicNote>>{
         MusicNote::from_vec(self.generator.get_notes_vec())
     }
 
@@ -154,7 +194,7 @@ struct MusicNote{
 impl MusicNote {
 
     #[func]
-    pub fn create(start_time:f64, end_time:f64, note:i64, octave:i64, velocity:i64) -> Gd<Self>{
+    pub fn create(start_time:f64, end_time:f64, note:i64, octave:i64, velocity:i64) -> Gd<MusicNote>{
 
         Gd::from_init_fn(|base:Base<RefCounted>| {
 
@@ -163,12 +203,12 @@ impl MusicNote {
     }
 
     pub fn from_vec(v: &Vec<(notes::Note, f64, f64)>) -> Array<Gd<Self>>{
-        let mut res:Array<Gd<Self>>;
+        let mut res:Array<Gd<Self>> = Array::new();
 
         for i in v{
 
             res.push(
-                Self::create(i.1, i.2, (i.0.note as u8).into(), i.0.octave.into(), (i.0.velocity as u8).into())
+                Self::create(i.1, i.2, (i.0.note as u8).into(), i.0.octave.into(), u8::from(i.0.velocity).into())
             );
         }
         res
@@ -177,3 +217,5 @@ impl MusicNote {
 
 #[godot_api]
 impl IRefCounted for MusicNote {}
+
+

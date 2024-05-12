@@ -3,7 +3,7 @@ use crate::generator;
 use midly;
 use rand::Rng;
 
-
+#[derive(Default, Debug)]
 pub struct MarkovGenerator
 {
     notes_vec : Vec<(notes::Note, f64, f64)>,

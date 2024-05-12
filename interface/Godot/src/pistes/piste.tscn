@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://b3y7p365rgydp"]
+[gd_scene load_steps=9 format=3 uid="uid://b3y7p365rgydp"]
 
 [ext_resource type="Script" path="res://src/pistes/MenuButtonAlgo.gd" id="1_0pgo8"]
 [ext_resource type="Script" path="res://src/pistes/ColorRect3.gd" id="1_q2m2p"]
@@ -6,6 +6,8 @@
 [ext_resource type="Script" path="res://src/pistes/Button.gd" id="2_2e7xp"]
 [ext_resource type="Script" path="res://src/pistes/MenuButtonInstru.gd" id="2_ptsur"]
 [ext_resource type="Script" path="res://src/pistes/Button2.gd" id="2_pv1d4"]
+[ext_resource type="PackedScene" uid="uid://bonthsilhdmun" path="res://src/instrument/instrument.tscn" id="7_kxiqm"]
+[ext_resource type="AudioStream" uid="uid://byvyy53cgyd6i" path="res://resources/SAW_A.mp3" id="8_om78f"]
 
 [node name="track" type="Control"]
 custom_minimum_size = Vector2(100, 100)
@@ -133,7 +135,8 @@ mouse_filter = 2
 color = Color(0.785406, 0.788662, 0.787856, 0.34902)
 metadata/_edit_use_anchors_ = true
 
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+[node name="instrument" parent="." instance=ExtResource("7_kxiqm")]
+sample_A = ExtResource("8_om78f")
 
 [connection signal="pressed" from="ColorRect2/solo" to="ColorRect2/solo" method="_on_pressed"]
 [connection signal="pressed" from="ColorRect2/mute" to="ColorRect2/mute" method="_on_pressed"]

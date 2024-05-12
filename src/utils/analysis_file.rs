@@ -10,7 +10,7 @@ use num_derive::FromPrimitive;
 /// 
 
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Default)]
 pub struct AnalysisData{
     /// beats per minute. Currently doesnt support non-int values.
     pub bpm: usize,

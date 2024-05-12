@@ -40,7 +40,7 @@ Button/styles/pressed = SubResource("StyleBoxFlat_2djvj")
 PopupPanel/styles/panel = SubResource("StyleBoxFlat_e8pps")
 
 [node name="PopupPanel" type="PopupPanel"]
-size = Vector2i(110, 425)
+size = Vector2i(110, 480)
 visible = true
 script = ExtResource("1_rhht0")
 
@@ -52,13 +52,36 @@ anchor_bottom = 1.0
 offset_left = 4.0
 offset_top = 4.0
 offset_right = 106.0
-offset_bottom = 421.0
+offset_bottom = 476.0
 grow_horizontal = 2
 grow_vertical = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Control"]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 theme = SubResource("Theme_fkpwh")
 theme_override_constants/separation = 5
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Control"]
+custom_minimum_size = Vector2(20, 30)
+layout_mode = 2
+offset_left = 30.4
+offset_top = 417.33
+offset_right = 132.4
+offset_bottom = 447.33
+mouse_filter = 2
+text = "Root"
+
+[node name="OptionButton" type="OptionButton" parent="Control"]
+layout_mode = 0
+offset_left = 17.875
+offset_top = 440.545
+offset_right = 83.875
+offset_bottom = 471.545
+theme_override_font_sizes/font_size = 16
+
+[connection signal="item_selected" from="Control/OptionButton" to="." method="_on_option_button_item_selected"]

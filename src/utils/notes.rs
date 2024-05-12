@@ -28,7 +28,7 @@ const NOTES_STR:[&str; 13] = ["A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F
  
 ///A simple musical note.
 /// 
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, Debug, Default)]
 
 pub struct Note{
 
@@ -62,7 +62,7 @@ impl Note {
         let mut closest:usize = 99999;
         let mut note:NoteNames = NoteNames::A;
         for n in &scale.notes{
-            let mut d = (*n as usize).abs_diff(self.note as usize);
+            let mut d = (*n as usize).abs_diff((self.note as usize + scale.root as usize)%12);
             d = min(d, 12-d); //modulo dist
             if d < closest{
 
@@ -76,7 +76,7 @@ impl Note {
 }
 
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Default)]
 pub struct Scale{
 
     pub notes:Vec<NoteNames>,

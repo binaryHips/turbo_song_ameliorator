@@ -178,7 +178,8 @@ offset_bottom = 1.00534
 texture = SubResource("GradientTexture2D_fffwb")
 script = ExtResource("6_k8sd0")
 
-[node name="TextEdit" type="TextEdit" parent="Anadata"]
+[node name="bpm" type="TextEdit" parent="Anadata"]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.008
@@ -213,3 +214,4 @@ text = "[center]BPM"
 [connection signal="mouse_exited" from="Anadata/Anadata2" to="Anadata/Anadata2" method="_on_mouse_exited"]
 [connection signal="mouse_entered" from="Anadata/Anadata2/Start_time" to="Anadata/Anadata2/Start_time" method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="Anadata/Anadata2/Start_time" to="Anadata/Anadata2/Start_time" method="_on_mouse_exited"]
+[connection signal="text_changed" from="Anadata/bpm" to="Anadata/Anadata2" method="_on_bpm_text_set"]

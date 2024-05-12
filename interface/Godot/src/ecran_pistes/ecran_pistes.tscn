@@ -143,6 +143,21 @@ theme_override_font_sizes/font_size = 13
 toggle_mode = true
 text = "Play"
 
+[node name="generate" type="Button" parent="Control2"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.198
+anchor_top = 0.04
+anchor_right = 0.227
+anchor_bottom = 0.081
+offset_left = -0.0960083
+offset_top = -0.079998
+offset_right = 0.495972
+offset_bottom = 0.213005
+theme_override_font_sizes/font_size = 13
+toggle_mode = true
+text = " Generate all "
+
 [node name="counter" type="RichTextLabel" parent="Control2"]
 layout_mode = 1
 anchors_preset = -1
@@ -200,6 +215,7 @@ script = ExtResource("8_fb53o")
 metadata/_edit_use_anchors_ = true
 
 [connection signal="toggled" from="Control2/Button" to="Control2/ScrollContainer/Tracks" method="_on_play_toggled"]
+[connection signal="toggled" from="Control2/generate" to="." method="_on_generate_toggled"]
 [connection signal="pressed" from="Control2/ScrollContainer/Tracks/Button" to="Control2/ScrollContainer/Tracks" method="_on_button_pressed"]
 [connection signal="mouse_entered" from="head" to="head" method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="head" to="head" method="_on_mouse_exited"]
