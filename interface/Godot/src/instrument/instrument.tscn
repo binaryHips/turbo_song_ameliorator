@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://bonthsilhdmun"]
+
+[ext_resource type="Script" path="res://src/instrument/instrument.gd" id="1_fl27x"]
+
+[sub_resource type="AudioStreamPolyphonic" id="AudioStreamPolyphonic_ld152"]
+
+[node name="instrument" type="Node"]
+script = ExtResource("1_fl27x")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = SubResource("AudioStreamPolyphonic_ld152")
+volume_db = -6.0
+bus = &"instr"

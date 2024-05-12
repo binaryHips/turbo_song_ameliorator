@@ -1,4 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://bh3cx8s2k1mow"]
+[gd_scene load_steps=4 format=3 uid="uid://bh3cx8s2k1mow"]
+
+[ext_resource type="Script" path="res://src/generation_block/generation_block.gd" id="1_few6j"]
 
 [sub_resource type="Gradient" id="Gradient_kdolw"]
 interpolation_mode = 2
@@ -21,6 +23,7 @@ offset_bottom = -3.05601
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_vertical = 4
+script = ExtResource("1_few6j")
 
 [node name="TextureRect" type="TextureRect" parent="."]
 layout_mode = 1

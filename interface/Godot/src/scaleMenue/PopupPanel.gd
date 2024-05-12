@@ -12,6 +12,8 @@ func _ready():
 		button.custom_minimum_size=Vector2i(100,30)
 		button.add_theme_font_size_override("font_size", 12)
 		container.add_child(button)
+		
+		$Control/OptionButton.add_item(tab[i])
 	
 
 
@@ -24,4 +26,9 @@ func scale_changed():
 		var b:Button = container.get_child(i)
 		get_parent().notes_in_scale[i]= b.button_pressed
 		
+	get_parent().scale_changed()
+
+
+func _on_option_button_item_selected(index):
+	get_parent().root = index
 	get_parent().scale_changed()

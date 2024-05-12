@@ -5,15 +5,17 @@ edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
+
+[lib]
+crate-type = ["cdylib"]  # Compile this crate to a dynamic C library.
+
 [dependencies]
-fundsp = "0.16.0" #for general dsp
-cpal = "0.15.2" #for realtime audio stream (?)
-#midir = "0.9.1" #for realtime midi processing
+godot = {git = "https://github.com/godot-rust/gdext", branch = "master"}
+fundsp = "0.17.1" #for general dsp
 midly = "0.5.3" #for offline midi processing
 num-traits = "0.2"
-num-derive = "0.2"
+num-derive = "0.4.2"
 pitch-detection = "0.3.0" #for pitch detection algorithm (remove if we end up doing our own!)
-inner = "0.1.1"
-
 rand = "0.8.5"
 anyhow = "1.0.82"
+

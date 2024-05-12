@@ -7,6 +7,7 @@ const PISTE = preload("res://src/pistes/piste.tscn")
 func _ready():
 	$audio_track.file_changed.connect(file_changed)
 	$audio_track.track_status_changed.connect(redo_track_status)
+	GenerationData.tracks_manager = self
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -97,3 +98,9 @@ func _input(event):
 			stop()
 		else:
 			play()
+
+func px_to_time(px):
+	return %head.px_to_time(px) #TODO refactor this here.
+
+func time_to_px(time):
+	return %head.time_to_px(time) #TODO refactor this here.
