@@ -184,9 +184,9 @@ fn construct_melody(list_rhythm : Vec<f64>, list_notes : Vec<notes::Note>) -> Ve
 
 /// Récupère la mélodie générée par construct_melody() et ajuste chaque note à la gamme supposé du fichier d'analyse.
 /// Pas de retour.
-fn scaling(melody : &mut Vec<(notes::Note, f64, f64)>, anafile : &analysis_file::AnalysisData)
+fn scaling(melody : &mut Vec<(notes::Note, f64, f64)>, analysis_data : &analysis_file::AnalysisData)
 {
     for song in melody {
-        song.0.quantize_to_scale(&anafile.scale);
+        song.0.quantize_to_scale(&analysis_data.scale);
     }
 }
