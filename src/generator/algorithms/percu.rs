@@ -45,15 +45,16 @@ impl notes::Generator for PercuGenerator
 fn create(analysis_data : &analysis_file::AnalysisData, start_time : f64, end_time : f64) -> Vec<(notes::Note, f64, f64)>
 {
     let percu_prob : Vec<Vec<f64>> = vec![
-        vec![1.0, 0.15, 0.75, 0.05, 0.25],      // 0 (premier temps)
-        vec![0.0, 0.0, 1.0, 0.05, 0.0],    // 1/2
-        vec![0.0, 0.75, 0.5, 0.05, 0.05],    // 1
-        vec![0.0, 0.0, 1.0, 0.1, 0.0],     // 1,5
-        vec![1.0, 0.25, 0.75, 0.05, 0.1],      // 2...
-        vec![0.0, 0.25, 1.0, 0.05, 0.0], 
-        vec![0.25, 0.75, 0.05, 0.05], 
-        vec![0.5, 0.25, 1.0, 0.25, 0.0]
-        ];      // [grosse caisse : A, caisse clair : A#, charlestone fermée : B, charlestone ouverte : C, crash : C#, wood block : D, cloche : D#, triangle : E]
+        vec![1.0, 0.15, 0.75, 0.05, 0.25, 0.05],      // 0 (premier temps)
+        vec![0.0, 0.0, 1.0, 0.05, 0.0, 0.05],    // 1/2
+        vec![0.0, 0.75, 0.5, 0.05, 0.05, 0.05],    // 1
+        vec![0.0, 0.0, 1.0, 0.1, 0.0, 0.05],     // 1,5
+        vec![1.0, 0.25, 0.75, 0.05, 0.1, 0.05],      // 2...
+        vec![0.0, 0.25, 1.0, 0.05, 0.0, 0.05], 
+        vec![0.25, 0.75, 0.5, 0.05, 0.05], 
+        vec![0.5, 0.25, 1.0, 0.25, 0.0, 0.05]
+        ];      // [grosse caisse : A, caisse clair : A#, charlestone fermée : B, charlestone ouverte : C, crash : C#, percus : D et +]
+    const NB_PERCUS : i32 = 3;          // nombre de percussions bonus
     const TMP_PER_MES : i32 = 4;        // nombre de temps par mesure
     const PRECISION : i32 = 2;      // plus petite fraction du temps
     let dureet : f64 = 60.0/(analysis_data.bpm as f64);        // durée d'un temp en seconde
@@ -63,7 +64,7 @@ fn create(analysis_data : &analysis_file::AnalysisData, start_time : f64, end_ti
     while end_temp < end_time {end_temp += dureet;}
     let nbt : i32 = ((end_temp - start_temp)/dureet) as i32;        // nombre de temps à jouer
     let tmp_dans_mes : i32 = (((start_temp-start_time)/dureet) as i32)%TMP_PER_MES;
-    let list_percu : Vec<Vec<bool>> = liste_percu_gen(nbt, TMP_PER_MES*PRECISION, tmp_dans_mes*PRECISION, &percu_prob);
+    let list_percu : Vec<Vec<bool>> = liste_percu_gen(nbt, TMP_PER_MES*PRECISION, tmp_dans_mes*PRECISION, &percu_prob, NB_PERCUS);
     let mut notes_vec : Vec<(notes::Note, f64, f64)> = construct_notes_vec(list_percu, dureet/(PRECISION as f64));
     notes_vec.push((notes::Note{note : notes::NoteNames::A, octave : 5, velocity : midly::num::u7::new(100)}, 10.0, 10.0));
     return notes_vec;
@@ -72,17 +73,17 @@ fn create(analysis_data : &analysis_file::AnalysisData, start_time : f64, end_ti
 
 /// Génère la suite de rythme nécessaire à la crétion de la mélodie sur le nombre de temps nbt.
 /// Retourne la suite de rythme sous forme d'un vecteur de durées codées par un flottant sur 64 bits.
-fn liste_percu_gen(nbt : i32, precision : i32, frac_tmp_dans_mes : i32, tab : &Vec<Vec<f64>>) -> Vec<Vec<bool>>
+fn liste_percu_gen(nbt : i32, precision : i32, frac_tmp_dans_mes : i32, tab : &Vec<Vec<f64>>, nb_perucs : i32) -> Vec<Vec<bool>>
 {
     let mut rng = rand::thread_rng();
     let mut list_percu : Vec<Vec<bool>> = vec![];
     for i in 0..(nbt*precision)
     {
         let mut percus : Vec<bool> = vec![];
-        for j in 0..(tab[((i+frac_tmp_dans_mes)%precision) as usize].len())
+        for j in 0..((tab[((i+frac_tmp_dans_mes)%precision) as usize].len())-1+nb_perucs)
         {
             let proba : f64 = rng.gen::<f64>();
-            percus.push(proba<tab[((i+frac_tmp_dans_mes)%precision) as usize][j]);
+            percus.push(proba<tab[((i+frac_tmp_dans_mes)%precision) as usize][min(j, (tab[((i+frac_tmp_dans_mes)%precision) as usize].len())-1)]);
         }
         list_percu.push(percus);
     }
