@@ -64,8 +64,8 @@ fn create(analysis_data : &analysis_file::AnalysisData, start_time : f64, end_ti
     let mut end_temp  : f64 = start_temp;
     while end_temp < end_time {end_temp += dureet;}
     let nbt : i32 = ((end_temp - start_temp)/dureet) as i32;        // nombre de temps à jouer
-    let tmp_dans_mes : i32 = (((start_temp-start_time)/dureet) as i32)%TMP_PER_MES;
-    let list_percu : Vec<Vec<bool>> = liste_percu_gen(nbt, TMP_PER_MES*PRECISION, tmp_dans_mes*PRECISION, &percu_prob, NB_PERCUS);
+    let tmp_dans_mes : i32 = (((start_temp-analysis_data.start_time)/dureet) as i32)%TMP_PER_MES;
+    let list_percu : Vec<Vec<bool>> = liste_percu_gen(nbt, PRECISION, TMP_PER_MES, tmp_dans_mes*PRECISION, &percu_prob, NB_PERCUS);
     let mut notes_vec : Vec<(notes::Note, f64, f64)> = construct_notes_vec(list_percu, dureet/(PRECISION as f64), start_temp-start_time);
     notes_vec.push((notes::Note{note : notes::NoteNames::A, octave : 5, velocity : midly::num::u7::new(100)}, 10.0, 10.0));
     return notes_vec;
@@ -74,18 +74,18 @@ fn create(analysis_data : &analysis_file::AnalysisData, start_time : f64, end_ti
 
 /// Génère la suite de rythme nécessaire à la crétion de la mélodie sur le nombre de temps nbt.
 /// Retourne la suite de rythme sous forme d'un vecteur de durées codées par un flottant sur 64 bits.
-fn liste_percu_gen(nbt : i32, precision : i32, frac_tmp_dans_mes : i32, tab : &Vec<Vec<f64>>, nb_perucs : i32) -> Vec<Vec<bool>>
+fn liste_percu_gen(nbt : i32, precision : i32, tmp_per_mes : i32, frac_tmp_dans_mes : i32, tab : &Vec<Vec<f64>>, nb_perucs : i32) -> Vec<Vec<bool>>
 {
     let mut rng = rand::thread_rng();
     let mut list_percu : Vec<Vec<bool>> = vec![];
     for i in 0..(nbt*precision)
     {
         let mut percus : Vec<bool> = vec![];
-        for j in 0..((tab[((i+frac_tmp_dans_mes)%precision) as usize].len())-1+(nb_perucs as usize))
+        for j in 0..((tab[((i+frac_tmp_dans_mes)%(precision*tmp_per_mes)) as usize].len())-1+(nb_perucs as usize))
         {
             let proba : f64 = rng.gen::<f64>();
-            let j2 : usize = cmp::min(j, (tab[((i+frac_tmp_dans_mes)%precision) as usize].len()-1) as usize);
-            percus.push(proba<tab[((i+frac_tmp_dans_mes)%precision) as usize][j2]);
+            let j2 : usize = cmp::min(j, (tab[((i+frac_tmp_dans_mes)%(precision*tmp_per_mes)) as usize].len()-1) as usize);
+            percus.push(proba<tab[((i+frac_tmp_dans_mes)%(precision*tmp_per_mes)) as usize][j2]);
         }
         list_percu.push(percus);
     }
