@@ -96,7 +96,7 @@ fn create(analysis_data : &analysis_file::AnalysisData, start_time : f64, end_ti
     let list_rhythm : Vec<f64> = markov_rhythm(nbt, 4, dureet, &rhythm_prob_simple);
     let nbn : i32 = list_rhythm.len() as i32;      // nombre de notes
     let list_notes : Vec<notes::Note> = markov_notes(nbn, &note_prob_simple);
-    let mut notes_vec : Vec<(notes::Note, f64, f64)> = construct_notes_vec(list_rhythm, list_notes);
+    let mut notes_vec : Vec<(notes::Note, f64, f64)> = construct_notes_vec(list_rhythm, list_notes, start_temp-start_time);
     scaling(&mut notes_vec, &analysis_data);
     return notes_vec;
 }
@@ -173,10 +173,10 @@ fn markov_notes(nbn : i32, tab : &Vec<Vec<f64>>) -> Vec<notes::Note>
 
 /// Assemble la suite de note et de rythme pour en faire une mélodie.
 /// Retourne la mélodie sous la forme d'un vecteur de triplet (note, instant de début, instant de fin).
-fn construct_notes_vec(list_rhythm : Vec<f64>, list_notes : Vec<notes::Note>) -> Vec<(notes::Note, f64, f64)>
+fn construct_notes_vec(list_rhythm : Vec<f64>, list_notes : Vec<notes::Note>, decallage : f64) -> Vec<(notes::Note, f64, f64)>
 {
     let mut notes_vec : Vec<(notes::Note, f64, f64)> = vec![];
-    let mut instant  : f64 = 0.0;
+    let mut instant  : f64 = decallage;
     for i in 0..list_rhythm.len()
     {
         if list_notes[i].velocity != 0 {notes_vec.push((list_notes[i], instant, instant+list_rhythm[i]));}

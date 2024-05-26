@@ -3,6 +3,7 @@ use crate::generator;
 use midly;
 use rand::Rng;
 use num_traits::FromPrimitive;
+use std::cmp;
 
 #[derive(Default, Debug)]
 pub struct PercuGenerator
@@ -65,7 +66,7 @@ fn create(analysis_data : &analysis_file::AnalysisData, start_time : f64, end_ti
     let nbt : i32 = ((end_temp - start_temp)/dureet) as i32;        // nombre de temps à jouer
     let tmp_dans_mes : i32 = (((start_temp-start_time)/dureet) as i32)%TMP_PER_MES;
     let list_percu : Vec<Vec<bool>> = liste_percu_gen(nbt, TMP_PER_MES*PRECISION, tmp_dans_mes*PRECISION, &percu_prob, NB_PERCUS);
-    let mut notes_vec : Vec<(notes::Note, f64, f64)> = construct_notes_vec(list_percu, dureet/(PRECISION as f64));
+    let mut notes_vec : Vec<(notes::Note, f64, f64)> = construct_notes_vec(list_percu, dureet/(PRECISION as f64), start_temp-start_time);
     notes_vec.push((notes::Note{note : notes::NoteNames::A, octave : 5, velocity : midly::num::u7::new(100)}, 10.0, 10.0));
     return notes_vec;
 }
@@ -80,10 +81,11 @@ fn liste_percu_gen(nbt : i32, precision : i32, frac_tmp_dans_mes : i32, tab : &V
     for i in 0..(nbt*precision)
     {
         let mut percus : Vec<bool> = vec![];
-        for j in 0..((tab[((i+frac_tmp_dans_mes)%precision) as usize].len())-1+nb_perucs)
+        for j in 0..((tab[((i+frac_tmp_dans_mes)%precision) as usize].len())-1+(nb_perucs as usize))
         {
             let proba : f64 = rng.gen::<f64>();
-            percus.push(proba<tab[((i+frac_tmp_dans_mes)%precision) as usize][min(j, (tab[((i+frac_tmp_dans_mes)%precision) as usize].len())-1)]);
+            let j2 : usize = cmp::min(j, (tab[((i+frac_tmp_dans_mes)%precision) as usize].len()-1) as usize);
+            percus.push(proba<tab[((i+frac_tmp_dans_mes)%precision) as usize][j2]);
         }
         list_percu.push(percus);
     }
@@ -93,10 +95,10 @@ fn liste_percu_gen(nbt : i32, precision : i32, frac_tmp_dans_mes : i32, tab : &V
 
 /// Assemble la suite de note et de rythme pour en faire une mélodie.
 /// Retourne la mélodie sous la forme d'un vecteur de triplet (note, instant de début, instant de fin).
-fn construct_notes_vec(list_percu : Vec<Vec<bool>>, dureet_frac : f64) -> Vec<(notes::Note, f64, f64)>
+fn construct_notes_vec(list_percu : Vec<Vec<bool>>, dureet_frac : f64, decallage : f64) -> Vec<(notes::Note, f64, f64)>
 {
     let mut notes_vec : Vec<(notes::Note, f64, f64)> = vec![];
-    let mut instant  : f64 = 0.0;
+    let mut instant  : f64 = decallage;
     for i in 0..list_percu.len()
     {
         for j in 0..(list_percu[i].len())
