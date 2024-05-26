@@ -3,6 +3,7 @@ use crate::generator;
 use midly;
 use rand::Rng;
 use num_traits::FromPrimitive;
+use std::cmp;
 
 #[derive(Default, Debug)]
 pub struct PercuGenerator
@@ -80,10 +81,11 @@ fn liste_percu_gen(nbt : i32, precision : i32, frac_tmp_dans_mes : i32, tab : &V
     for i in 0..(nbt*precision)
     {
         let mut percus : Vec<bool> = vec![];
-        for j in 0..((tab[((i+frac_tmp_dans_mes)%precision) as usize].len())-1+nb_perucs)
+        for j in 0..((tab[((i+frac_tmp_dans_mes)%precision) as usize].len())-1+(nb_perucs as usize))
         {
             let proba : f64 = rng.gen::<f64>();
-            percus.push(proba<tab[((i+frac_tmp_dans_mes)%precision) as usize][min(j, (tab[((i+frac_tmp_dans_mes)%precision) as usize].len())-1)]);
+            let j2 : usize = cmp::min(j, (tab[((i+frac_tmp_dans_mes)%precision) as usize].len()-1) as usize);
+            percus.push(proba<tab[((i+frac_tmp_dans_mes)%precision) as usize][j2]);
         }
         list_percu.push(percus);
     }
