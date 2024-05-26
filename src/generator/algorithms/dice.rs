@@ -6,7 +6,7 @@ use std::fs;
 
 pub struct MusicalDiceGenerator
 {
-    melody : Vec<(notes::Note, f64, f64)>,
+    notes_vec : Vec<(notes::Note, f64, f64)>,
     analysis_data : analysis_file::AnalysisData,
 }
 
@@ -14,23 +14,23 @@ impl MusicalDiceGenerator
 {
     pub fn new(analysis_data : analysis_file::AnalysisData) -> Self
     {
-        Self {melody : vec![], analysis_data : analysis_data}
+        Self {notes_vec : vec![], analysis_data : analysis_data}
     }
 }
 impl notes::Generator for MusicalDiceGenerator{
     fn get_notes_vec(&self) -> &Vec<(notes::Note, f64, f64)>
     {
-        return &self.melody;
+        return &(self.notes_vec);
     }
 
     fn generate(&mut self, start_time : f64, end_time : f64)
     {
-        self.melody = create(&self.analysis_data, start_time, end_time);
+        self.notes_vec = create(&self.analysis_data, start_time, end_time);
     }
 
     fn midi_gen(&self, PATHSTRING : &str)
     {
-        generator::midi_gen::midi_generator(&self.melody, &self.analysis_data, PATHSTRING);
+        generator::midi_gen::midi_generator(&self.notes_vec, &self.analysis_data, PATHSTRING);
     }
 }
 
@@ -50,11 +50,11 @@ fn roll_dice(nbFace : i32, nbDice : i32) -> Vec<i32>{
 // & ou pas ?
 fn create(analysis_data : &analysis_file::AnalysisData, start_time : f64, end_time : f64) -> Vec<(notes::Note, f64, f64)>
 {
-    const PATHSTRING : &str = "./MIDIS";
+    const PATHSTRING : &str = "./MIDIS";        // "./assets/melody"
     const BPM_MUSIC : i32 = 120;
     const NBT_DE : i32 = 4;         // nombre de temps par dé lancé
     let mut nbMusic = 0;
-    for entry in fs::read_dir(PATHSTRING) {
+    for entry in fs::read_dir(PATHSTRING).unwrap() {
         nbMusic = nbMusic +1
     }
     let dureet : f64 = 60.0/(analysis_data.bpm as f64);        // durée d'un temp en seconde
@@ -80,7 +80,7 @@ fn create(analysis_data : &analysis_file::AnalysisData, start_time : f64, end_ti
             {
                 let bytes:Vec<u8> = fs::read((entry.unwrap()).path()).unwrap();
                 let smf = Smf::parse(&bytes).unwrap();
-                let track = &smf.tracks[0];
+                let track = &smf.tracks[1];
                 let mut delta = 0.0;
                 for track_event in track{
                     if delta>=debut && delta<fin
@@ -110,7 +110,7 @@ fn create(analysis_data : &analysis_file::AnalysisData, start_time : f64, end_ti
                                     9 => melody.push((notes::Note{note : notes::NoteNames::Fd, octave : octave as u8, velocity : midly::num::u7::new(100)}, ((i*NBT_DE) as f64)*dureet+delta, 0.0)),
                                     10 => melody.push((notes::Note{note : notes::NoteNames::G, octave : octave as u8, velocity : midly::num::u7::new(100)}, ((i*NBT_DE) as f64)*dureet+delta, 0.0)),
                                     11 => melody.push((notes::Note{note : notes::NoteNames::Gd, octave : octave as u8, velocity : midly::num::u7::new(100)}, ((i*NBT_DE) as f64)*dureet+delta, 0.0)),
-                                    _ => continue
+                                    _ => ()
                                 }
                                 notes_pressed[key.as_int() as usize] = taille_melody;
                                 taille_melody += 1;   
@@ -120,7 +120,7 @@ fn create(analysis_data : &analysis_file::AnalysisData, start_time : f64, end_ti
                                 melody[notes_pressed[key.as_int() as usize] as usize].2 = ((i*NBT_DE) as f64)*dureet+delta;
                                 notes_pressed[key.as_int() as usize] = -1;
                             },
-                            _ => continue
+                            _ => ()
                         }
                     }
                     else if delta >= fin && delta < end_temp-start_temp
@@ -137,10 +137,10 @@ fn create(analysis_data : &analysis_file::AnalysisData, start_time : f64, end_ti
                                 melody[notes_pressed[key.as_int() as usize] as usize].2 = ((i*NBT_DE) as f64)*dureet+delta;
                                 notes_pressed[key.as_int() as usize] = -1;
                             },
-                            _ => continue,                
+                            _ => (),                
                         }
                     }
-                    delta += (track_event.delta.as_int() as f64)*(BPM_MUSIC as f64)/(analysis_data.bpm as f64);
+                    delta += (track_event.delta.as_int() as f64)*(BPM_MUSIC as f64)/(analysis_data.bpm as f64)/960.0;
                 }
                 for pos in (&mut *notes_pressed).into_iter()
                 {

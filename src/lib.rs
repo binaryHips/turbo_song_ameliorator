@@ -13,6 +13,7 @@ use std::boxed::Box;
 use std::ops::Deref;
 use generator::algorithms::markov::MarkovGenerator;
 use generator::algorithms::dice::MusicalDiceGenerator;
+use generator::algorithms::percu::PercuGenerator;
 struct MyExtension;
 use notes::Generator;
 
@@ -141,7 +142,8 @@ impl MusicGenerator {
 
             "markov" => Box::new(MarkovGenerator::new(data.bind().data.clone())),
             "dice" => Box::new(MusicalDiceGenerator::new(data.bind().data.clone())),
-            _ => panic!("Not a valid algorithm name. Valid names are: 'markov'"),
+            "perc" => Box::new(PercuGenerator::new(data.bind().data.clone())),
+            _ => panic!("Not a valid algorithm name. Valid names are: 'markov', 'dice' and 'perc'"),
         };
 
         Gd::from_init_fn(|base| {

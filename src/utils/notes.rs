@@ -16,6 +16,13 @@ impl From<i32> for NoteNames {
         FromPrimitive::from_i32((n) % 12).unwrap()
     }
 }
+
+impl From<usize> for NoteNames {
+    fn from(n: usize) -> Self {
+        FromPrimitive::from_i32((n as i32) % 12).unwrap()
+    }
+}
+
 impl Debug for NoteNames{
 
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> Result<(), std::fmt::Error>{

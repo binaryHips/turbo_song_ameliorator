@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://b3y7p365rgydp"]
+[gd_scene load_steps=29 format=3 uid="uid://b3y7p365rgydp"]
 
 [ext_resource type="Script" path="res://src/pistes/MenuButtonAlgo.gd" id="1_0pgo8"]
 [ext_resource type="Script" path="res://src/pistes/ColorRect3.gd" id="1_q2m2p"]
@@ -8,6 +8,26 @@
 [ext_resource type="Script" path="res://src/pistes/Button2.gd" id="2_pv1d4"]
 [ext_resource type="PackedScene" uid="uid://bonthsilhdmun" path="res://src/instrument/instrument.tscn" id="7_kxiqm"]
 [ext_resource type="AudioStream" uid="uid://byvyy53cgyd6i" path="res://resources/SAW_A.mp3" id="8_om78f"]
+[ext_resource type="AudioStream" uid="uid://cl18fsdvi0orl" path="res://resources/samples/guitar/A_guitar.mp3" id="9_0cvqm"]
+[ext_resource type="AudioStream" uid="uid://b4ebmi5b1ovbc" path="res://resources/samples/guitar/A#_guitar.mp3" id="10_jg848"]
+[ext_resource type="AudioStream" uid="uid://odh42k4g1gvr" path="res://resources/samples/guitar/B_guitar.mp3" id="11_pccyp"]
+[ext_resource type="AudioStream" uid="uid://dqhjalax4i0mu" path="res://resources/samples/guitar/C_guitar.mp3" id="12_mtd7f"]
+[ext_resource type="AudioStream" uid="uid://cewi18ox5b537" path="res://resources/samples/guitar/C#_guitar.mp3" id="13_iclyq"]
+[ext_resource type="AudioStream" uid="uid://b5ii3l2skeux6" path="res://resources/samples/guitar/D_guitar.mp3" id="14_twi2s"]
+[ext_resource type="AudioStream" uid="uid://bcjyiug17cy3g" path="res://resources/samples/guitar/D#_guitar.mp3" id="15_hmnia"]
+[ext_resource type="AudioStream" uid="uid://cctm7ea5bw5i5" path="res://resources/samples/guitar/E_guitar.mp3" id="16_kq43b"]
+[ext_resource type="AudioStream" uid="uid://dh5kvbs67vndh" path="res://resources/samples/guitar/F_guitar.mp3" id="17_qo6l4"]
+[ext_resource type="AudioStream" uid="uid://bgabivmmr0udd" path="res://resources/samples/guitar/F#_guitar.mp3" id="18_6f47l"]
+[ext_resource type="AudioStream" uid="uid://174smfmj3xwb" path="res://resources/samples/guitar/G_guitar.mp3" id="19_pcmpl"]
+[ext_resource type="AudioStream" uid="uid://dvin02ow4ikg4" path="res://resources/samples/guitar/G#_guitar.mp3" id="20_tns6d"]
+[ext_resource type="AudioStream" uid="uid://cq163o24i00ty" path="res://resources/samples/drumkit/A_Kick.mp3" id="21_jhjp8"]
+[ext_resource type="AudioStream" uid="uid://dkewdjsnu6u7q" path="res://resources/samples/drumkit/A#_Snare.mp3" id="22_xjv1b"]
+[ext_resource type="AudioStream" uid="uid://saotsg5v6fp8" path="res://resources/samples/drumkit/B_Hh.mp3" id="23_4rrvc"]
+[ext_resource type="AudioStream" uid="uid://bevb4tbimy7dy" path="res://resources/samples/drumkit/C_Hh_open.mp3" id="24_shek7"]
+[ext_resource type="AudioStream" uid="uid://uaqaiejcuts4" path="res://resources/samples/drumkit/C#_crash.mp3" id="25_rhv4y"]
+[ext_resource type="AudioStream" uid="uid://bco0uo4hop2d6" path="res://resources/samples/drumkit/D_perc1.mp3" id="26_g4nvv"]
+[ext_resource type="AudioStream" uid="uid://ci8oeu40yt3db" path="res://resources/samples/drumkit/D#_perc2.mp3" id="27_j2p8u"]
+[ext_resource type="AudioStream" uid="uid://dtwegtuanogcn" path="res://resources/samples/drumkit/E_perc3.mp3" id="28_26e1i"]
 
 [node name="track" type="Control"]
 custom_minimum_size = Vector2(100, 100)
@@ -135,8 +155,19 @@ mouse_filter = 2
 color = Color(0.785406, 0.788662, 0.787856, 0.34902)
 metadata/_edit_use_anchors_ = true
 
-[node name="instrument" parent="." instance=ExtResource("7_kxiqm")]
+[node name="instruments" type="Node" parent="."]
+
+[node name="Saw" parent="instruments" instance=ExtResource("7_kxiqm")]
 sample_A = ExtResource("8_om78f")
+
+[node name="Guitar" parent="instruments" instance=ExtResource("7_kxiqm")]
+multisamples = true
+multisamples_list = Array[AudioStream]([ExtResource("9_0cvqm"), ExtResource("10_jg848"), ExtResource("11_pccyp"), ExtResource("12_mtd7f"), ExtResource("13_iclyq"), ExtResource("14_twi2s"), ExtResource("15_hmnia"), ExtResource("16_kq43b"), ExtResource("17_qo6l4"), ExtResource("18_6f47l"), ExtResource("19_pcmpl"), ExtResource("20_tns6d")])
+
+[node name="Perc kit" parent="instruments" instance=ExtResource("7_kxiqm")]
+multisamples = true
+multisamples_list = Array[AudioStream]([ExtResource("21_jhjp8"), ExtResource("22_xjv1b"), ExtResource("23_4rrvc"), ExtResource("24_shek7"), ExtResource("25_rhv4y"), ExtResource("26_g4nvv"), ExtResource("27_j2p8u"), ExtResource("28_26e1i")])
+infinite_release = true
 
 [connection signal="pressed" from="ColorRect2/solo" to="ColorRect2/solo" method="_on_pressed"]
 [connection signal="pressed" from="ColorRect2/mute" to="ColorRect2/mute" method="_on_pressed"]

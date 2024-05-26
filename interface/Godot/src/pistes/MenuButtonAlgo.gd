@@ -7,7 +7,8 @@ func _ready():
 		get_popup().add_item(i)
 	
 	get_popup().index_pressed.connect(_index_pressed)
-
+	
+	_index_pressed(0)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):

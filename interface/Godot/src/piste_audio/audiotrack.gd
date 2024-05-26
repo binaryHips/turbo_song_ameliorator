@@ -75,20 +75,25 @@ func on_files_dropped(files:PackedStringArray):
 	print(files[0])
 	#$AudioStreamPlayer.play()
 	GenerationData.analyse_file(files[0])
-	
 	print("TIME BEFORE START ", GenerationData.anaData.get_time_before_start())
-	AnaData.get_node("Anadata2/Start_time").global_position.x = get_parent().time_to_px(
-		GenerationData.anaData.get_time_before_start()
-	)
+	#AnaData.get_node("Anadata2/Start_time").global_position.x = get_parent().time_to_px(
+	#	GenerationData.anaData.get_time_before_start()
+	#)
+	AnaData.get_node("offset").text = "%.3f" % GenerationData.anaData.get_time_before_start()
 	
 	var scale = AnaData.get_node("Anadata2").SCALE.instantiate()
 	AnaData.get_node("Anadata2").add_child(scale)
 	scale.make_scale(GenerationData.anaData)
 	scale.position.x = 0
 	AnaData.get_node("bpm").text = str(GenerationData.anaData.get_bpm())
+	get_waveform_samples.call_deferred()
+	prepare.call_deferred()
 	
-	get_waveform_samples()
-	
+func prepare(): #deadline smell
+	get_parent().play()
+	get_parent().stop()
+	get_parent().current_time = 0.0
+
 
 func load_ogg(path):
 	return AudioStreamOggVorbis.load_from_file(path)
@@ -122,6 +127,7 @@ func _on_v_slider_value_changed(value):
 
 func play(time):
 	$AudioStreamPlayer.play(time)
+
 
 func stop():
 	$AudioStreamPlayer.stop()

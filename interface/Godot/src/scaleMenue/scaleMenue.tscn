@@ -61,6 +61,8 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_top = 63.085
+offset_bottom = 63.0851
 grow_horizontal = 2
 grow_vertical = 2
 theme = SubResource("Theme_fkpwh")
@@ -70,18 +72,21 @@ theme_override_constants/separation = 5
 custom_minimum_size = Vector2(20, 30)
 layout_mode = 2
 offset_left = 30.4
-offset_top = 417.33
 offset_right = 132.4
-offset_bottom = 447.33
+offset_bottom = 30.0
 mouse_filter = 2
 text = "Root"
 
-[node name="OptionButton" type="OptionButton" parent="Control"]
-layout_mode = 0
-offset_left = 17.875
-offset_top = 440.545
-offset_right = 83.875
-offset_bottom = 471.545
+[node name="CanvasLayer" type="CanvasLayer" parent="Control"]
+layer = 128
+
+[node name="OptionButton" type="OptionButton" parent="Control/CanvasLayer"]
+z_index = 20
+z_as_relative = false
+offset_left = 21.875
+offset_top = 28.59
+offset_right = 87.8749
+offset_bottom = 59.59
 theme_override_font_sizes/font_size = 16
 
-[connection signal="item_selected" from="Control/OptionButton" to="." method="_on_option_button_item_selected"]
+[connection signal="item_selected" from="Control/CanvasLayer/OptionButton" to="." method="_on_option_button_item_selected"]

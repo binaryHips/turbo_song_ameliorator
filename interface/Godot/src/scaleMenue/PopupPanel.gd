@@ -13,13 +13,13 @@ func _ready():
 		button.add_theme_font_size_override("font_size", 12)
 		container.add_child(button)
 		
-		$Control/OptionButton.add_item(tab[i])
+		$Control/CanvasLayer/OptionButton.add_item(tab[i])
 	
-
+	$Control/CanvasLayer.layer = 1025
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	pass
+	$Control/CanvasLayer/OptionButton.get_popup().position.x = position.x+125
 
 func scale_changed():
 	for i in container.get_child_count():
