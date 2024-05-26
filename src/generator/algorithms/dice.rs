@@ -50,7 +50,7 @@ fn roll_dice(nbFace : i32, nbDice : i32) -> Vec<i32>{
 // & ou pas ?
 fn create(analysis_data : &analysis_file::AnalysisData, start_time : f64, end_time : f64) -> Vec<(notes::Note, f64, f64)>
 {
-    const PATHSTRING : &str = "./MIDIS";        // "./assets/melody"
+    const PATHSTRING : &str = "./assets/melody";        // "./MIDIS"
     const BPM_MUSIC : i32 = 120;
     const NBT_DE : i32 = 4;         // nombre de temps par dé lancé
     let mut nbMusic = 0;
@@ -98,18 +98,18 @@ fn create(analysis_data : &analysis_file::AnalysisData, start_time : f64, end_ti
                                 let octave = ((key.as_int() as i32)-21)/12;
                                 match num_note
                                 {
-                                    0 => melody.push((notes::Note{note : notes::NoteNames::A, octave : octave as u8, velocity : midly::num::u7::new(100)}, ((i*NBT_DE) as f64)*dureet+delta, 0.0)),
-                                    1 => melody.push((notes::Note{note : notes::NoteNames::Ad, octave : octave as u8, velocity : midly::num::u7::new(100)}, ((i*NBT_DE) as f64)*dureet+delta, 0.0)),
-                                    2 => melody.push((notes::Note{note : notes::NoteNames::B, octave : octave as u8, velocity : midly::num::u7::new(100)}, ((i*NBT_DE) as f64)*dureet+delta, 0.0)),
-                                    3 => melody.push((notes::Note{note : notes::NoteNames::C, octave : octave as u8, velocity : midly::num::u7::new(100)}, ((i*NBT_DE) as f64)*dureet+delta, 0.0)),
-                                    4 => melody.push((notes::Note{note : notes::NoteNames::Cd, octave : octave as u8, velocity : midly::num::u7::new(100)}, ((i*NBT_DE) as f64)*dureet+delta, 0.0)),
-                                    5 => melody.push((notes::Note{note : notes::NoteNames::D, octave : octave as u8, velocity : midly::num::u7::new(100)}, ((i*NBT_DE) as f64)*dureet+delta, 0.0)),
-                                    6 => melody.push((notes::Note{note : notes::NoteNames::Dd, octave : octave as u8, velocity : midly::num::u7::new(100)}, ((i*NBT_DE) as f64)*dureet+delta, 0.0)),
-                                    7 => melody.push((notes::Note{note : notes::NoteNames::E, octave : octave as u8, velocity : midly::num::u7::new(100)}, ((i*NBT_DE) as f64)*dureet+delta, 0.0)),
-                                    8 => melody.push((notes::Note{note : notes::NoteNames::F, octave : octave as u8, velocity : midly::num::u7::new(100)}, ((i*NBT_DE) as f64)*dureet+delta, 0.0)),
-                                    9 => melody.push((notes::Note{note : notes::NoteNames::Fd, octave : octave as u8, velocity : midly::num::u7::new(100)}, ((i*NBT_DE) as f64)*dureet+delta, 0.0)),
-                                    10 => melody.push((notes::Note{note : notes::NoteNames::G, octave : octave as u8, velocity : midly::num::u7::new(100)}, ((i*NBT_DE) as f64)*dureet+delta, 0.0)),
-                                    11 => melody.push((notes::Note{note : notes::NoteNames::Gd, octave : octave as u8, velocity : midly::num::u7::new(100)}, ((i*NBT_DE) as f64)*dureet+delta, 0.0)),
+                                    0 => melody.push((notes::Note{note : notes::NoteNames::A, octave : octave as u8, velocity : midly::num::u7::new(100)}, ((i*NBT_DE) as f64)*dureet+delta+analysis_data.start_time, 0.0)),
+                                    1 => melody.push((notes::Note{note : notes::NoteNames::Ad, octave : octave as u8, velocity : midly::num::u7::new(100)}, ((i*NBT_DE) as f64)*dureet+delta+analysis_data.start_time, 0.0)),
+                                    2 => melody.push((notes::Note{note : notes::NoteNames::B, octave : octave as u8, velocity : midly::num::u7::new(100)}, ((i*NBT_DE) as f64)*dureet+delta+analysis_data.start_time, 0.0)),
+                                    3 => melody.push((notes::Note{note : notes::NoteNames::C, octave : octave as u8, velocity : midly::num::u7::new(100)}, ((i*NBT_DE) as f64)*dureet+delta+analysis_data.start_time, 0.0)),
+                                    4 => melody.push((notes::Note{note : notes::NoteNames::Cd, octave : octave as u8, velocity : midly::num::u7::new(100)}, ((i*NBT_DE) as f64)*dureet+delta+analysis_data.start_time, 0.0)),
+                                    5 => melody.push((notes::Note{note : notes::NoteNames::D, octave : octave as u8, velocity : midly::num::u7::new(100)}, ((i*NBT_DE) as f64)*dureet+delta+analysis_data.start_time, 0.0)),
+                                    6 => melody.push((notes::Note{note : notes::NoteNames::Dd, octave : octave as u8, velocity : midly::num::u7::new(100)}, ((i*NBT_DE) as f64)*dureet+delta+analysis_data.start_time, 0.0)),
+                                    7 => melody.push((notes::Note{note : notes::NoteNames::E, octave : octave as u8, velocity : midly::num::u7::new(100)}, ((i*NBT_DE) as f64)*dureet+delta+analysis_data.start_time, 0.0)),
+                                    8 => melody.push((notes::Note{note : notes::NoteNames::F, octave : octave as u8, velocity : midly::num::u7::new(100)}, ((i*NBT_DE) as f64)*dureet+delta+analysis_data.start_time, 0.0)),
+                                    9 => melody.push((notes::Note{note : notes::NoteNames::Fd, octave : octave as u8, velocity : midly::num::u7::new(100)}, ((i*NBT_DE) as f64)*dureet+delta+analysis_data.start_time, 0.0)),
+                                    10 => melody.push((notes::Note{note : notes::NoteNames::G, octave : octave as u8, velocity : midly::num::u7::new(100)}, ((i*NBT_DE) as f64)*dureet+delta+analysis_data.start_time, 0.0)),
+                                    11 => melody.push((notes::Note{note : notes::NoteNames::Gd, octave : octave as u8, velocity : midly::num::u7::new(100)}, ((i*NBT_DE) as f64)*dureet+delta+analysis_data.start_time, 0.0)),
                                     _ => ()
                                 }
                                 notes_pressed[key.as_int() as usize] = taille_melody;
@@ -117,7 +117,7 @@ fn create(analysis_data : &analysis_file::AnalysisData, start_time : f64, end_ti
                             },
                             MidiMessage::NoteOff {key, vel: _} => if notes_pressed[key.as_int() as usize] != -1
                             {
-                                melody[notes_pressed[key.as_int() as usize] as usize].2 = ((i*NBT_DE) as f64)*dureet+delta;
+                                melody[notes_pressed[key.as_int() as usize] as usize].2 = ((i*NBT_DE) as f64)*dureet+delta+analysis_data.start_time;
                                 notes_pressed[key.as_int() as usize] = -1;
                             },
                             _ => ()
@@ -134,7 +134,7 @@ fn create(analysis_data : &analysis_file::AnalysisData, start_time : f64, end_ti
                         {
                             MidiMessage::NoteOff {key, vel: _} => if notes_pressed[key.as_int() as usize] != -1
                             {
-                                melody[notes_pressed[key.as_int() as usize] as usize].2 = ((i*NBT_DE) as f64)*dureet+delta;
+                                melody[notes_pressed[key.as_int() as usize] as usize].2 = ((i*NBT_DE) as f64)*dureet+delta+analysis_data.start_time;
                                 notes_pressed[key.as_int() as usize] = -1;
                             },
                             _ => (),                

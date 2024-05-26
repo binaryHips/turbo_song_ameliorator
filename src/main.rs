@@ -22,7 +22,7 @@ fn test_midi_gen_percu()
     let pathstring : &str = "./assets/generation/test_make_melody.mid";
     let mut percu_gen : generator::algorithms::percu::PercuGenerator = generator::algorithms::percu::PercuGenerator::new(analysis_data);
     percu_gen.generate(0.0, 20.0);
-    println!("{:?}", percu_gen.get_notes_vec().len());
+    println!("{:?}", percu_gen.get_notes_vec());
     percu_gen.midi_gen(pathstring);
 }
 
