@@ -3,7 +3,7 @@ extends Node
 @export var sample_A:AudioStream
 @export var multisamples := false
 @export var multisamples_list: Array[AudioStream] = []
-
+@export var infinite_release := false
 @onready var playback:AudioStreamPlaybackPolyphonic
 
 func start():
@@ -35,7 +35,8 @@ func play_note(note:int, length:float, velocity:int):
 			2**(note/12.0)
 		)
 	
-	await get_tree().create_timer(length).timeout
-	
-	if playback.is_stream_playing(idx):
-		playback.stop_stream(idx)
+	if not infinite_release:
+		await get_tree().create_timer(length).timeout
+		
+		if playback.is_stream_playing(idx):
+			playback.stop_stream(idx)

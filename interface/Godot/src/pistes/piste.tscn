@@ -167,6 +167,7 @@ multisamples_list = Array[AudioStream]([ExtResource("9_0cvqm"), ExtResource("10_
 [node name="Perc kit" parent="instruments" instance=ExtResource("7_kxiqm")]
 multisamples = true
 multisamples_list = Array[AudioStream]([ExtResource("21_jhjp8"), ExtResource("22_xjv1b"), ExtResource("23_4rrvc"), ExtResource("24_shek7"), ExtResource("25_rhv4y"), ExtResource("26_g4nvv"), ExtResource("27_j2p8u"), ExtResource("28_26e1i")])
+infinite_release = true
 
 [connection signal="pressed" from="ColorRect2/solo" to="ColorRect2/solo" method="_on_pressed"]
 [connection signal="pressed" from="ColorRect2/mute" to="ColorRect2/mute" method="_on_pressed"]
