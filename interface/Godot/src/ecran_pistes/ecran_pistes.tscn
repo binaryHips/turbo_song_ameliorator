@@ -163,14 +163,14 @@ layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.321
 anchor_top = 0.037
-anchor_right = 0.389
-anchor_bottom = 0.094
+anchor_right = 0.446
+anchor_bottom = 0.089
 offset_left = 0.207977
 offset_top = -0.198999
-offset_right = -0.128021
-offset_bottom = -2.938
+offset_right = 0.208008
+offset_bottom = 0.196999
 theme_override_font_sizes/normal_font_size = 22
-text = "00:00"
+text = "00:00::000"
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Control2"]
 layout_mode = 1

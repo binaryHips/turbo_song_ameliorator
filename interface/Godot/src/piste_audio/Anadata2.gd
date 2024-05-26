@@ -3,6 +3,7 @@ extends ColorRect
 const SCALE = preload("res://src/scale/scale.tscn")
 
 @onready var bpm = get_parent().get_node("bpm")
+@onready var offset = get_parent().get_node("offset")
 var mouse_in := false
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -45,10 +46,25 @@ func _on_bpm_text_set():
 	if v.is_valid_int():
 	
 		GenerationData.anaData = MusicAnalysisData.create(
-			int(bpm.text),
+			int(v),
 			GenerationData.anaData.get_scale_notes(),
 			GenerationData.anaData.get_scale_root(),
 			GenerationData.anaData.get_time_before_start()
+			
+		)
+		
+		print("BPM ", GenerationData.anaData.get_bpm())
+
+
+func _on_offset_changed():
+	var v:String = offset.text
+	if v.is_valid_int():
+	
+		GenerationData.anaData = MusicAnalysisData.create(
+			GenerationData.anaData.get_bpm(),
+			GenerationData.anaData.get_scale_notes(),
+			GenerationData.anaData.get_scale_root(),
+			float(v),
 			
 		)
 		

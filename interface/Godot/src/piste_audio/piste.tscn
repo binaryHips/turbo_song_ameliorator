@@ -139,7 +139,6 @@ text = "[center]No audio loaded!
 (drop an ogg vorbis or mp3 file to start)"
 
 [node name="Anadata" type="ColorRect" parent="."]
-visible = false
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 1
 anchors_preset = -1
@@ -164,6 +163,7 @@ color = Color(0.685747, 0.228835, 0.434485, 1)
 script = ExtResource("6_wnfgv")
 
 [node name="Start_time" type="TextureRect" parent="Anadata/Anadata2"]
+visible = false
 z_index = 1
 layout_mode = 1
 anchors_preset = -1
@@ -204,6 +204,33 @@ offset_bottom = -0.00400162
 bbcode_enabled = true
 text = "[center]BPM"
 
+[node name="offset" type="TextEdit" parent="Anadata"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.008
+anchor_top = 0.409
+anchor_right = 0.074
+anchor_bottom = 0.947
+offset_left = 90.784
+offset_top = -0.493994
+offset_right = 90.752
+offset_bottom = -0.00199509
+placeholder_text = "No BPM"
+
+[node name="RichTextLabel2" type="RichTextLabel" parent="Anadata"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.008
+anchor_right = 0.074
+anchor_bottom = 0.394
+offset_left = 90.784
+offset_top = -0.499992
+offset_right = 90.752
+offset_bottom = -0.503994
+bbcode_enabled = true
+text = "[center]Offset"
+
 [connection signal="pressed" from="ColorRect2/solo" to="ColorRect2/solo" method="_on_pressed"]
 [connection signal="pressed" from="ColorRect2/mute" to="ColorRect2/mute" method="_on_pressed"]
 [connection signal="toggled" from="ColorRect2/check_analysis_data" to="." method="_on_check_analysis_data_toggled"]
@@ -215,3 +242,4 @@ text = "[center]BPM"
 [connection signal="mouse_entered" from="Anadata/Anadata2/Start_time" to="Anadata/Anadata2/Start_time" method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="Anadata/Anadata2/Start_time" to="Anadata/Anadata2/Start_time" method="_on_mouse_exited"]
 [connection signal="text_changed" from="Anadata/bpm" to="Anadata/Anadata2" method="_on_bpm_text_set"]
+[connection signal="text_changed" from="Anadata/offset" to="Anadata/Anadata2" method="_on_offset_changed"]

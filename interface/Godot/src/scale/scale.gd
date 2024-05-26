@@ -42,6 +42,9 @@ func make_scale(data:MusicAnalysisData):
 	var notes = data.get_scale_notes()
 	root = data.get_scale_root()
 	
+	$PopupPanel.get_node("Control/CanvasLayer/OptionButton").selected = root
+	print("root:", root)
+	
 	for i in 12:
 		notes_in_scale[i] = i in notes
 	

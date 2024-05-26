@@ -75,19 +75,23 @@ func on_files_dropped(files:PackedStringArray):
 	print(files[0])
 	#$AudioStreamPlayer.play()
 	GenerationData.analyse_file(files[0])
-	
 	print("TIME BEFORE START ", GenerationData.anaData.get_time_before_start())
-	AnaData.get_node("Anadata2/Start_time").global_position.x = get_parent().time_to_px(
-		GenerationData.anaData.get_time_before_start()
-	)
+	#AnaData.get_node("Anadata2/Start_time").global_position.x = get_parent().time_to_px(
+	#	GenerationData.anaData.get_time_before_start()
+	#)
+	AnaData.get_node("offset").text = "%.3f" % GenerationData.anaData.get_time_before_start()
 	
 	var scale = AnaData.get_node("Anadata2").SCALE.instantiate()
 	AnaData.get_node("Anadata2").add_child(scale)
 	scale.make_scale(GenerationData.anaData)
 	scale.position.x = 0
 	AnaData.get_node("bpm").text = str(GenerationData.anaData.get_bpm())
+	$AudioStreamPlayer.volume_db = volume
+	$AudioStreamPlayer.play()
+	$AudioStreamPlayer.stop()
 	
 	get_waveform_samples()
+	
 	
 
 func load_ogg(path):

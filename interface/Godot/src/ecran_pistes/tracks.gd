@@ -18,11 +18,10 @@ func _process(delta):
 			stop()
 
 
-
 func _on_button_pressed():
 	var nouvelle_piste = PISTE.instantiate()
 	nouvelle_piste.track_status_changed.connect(redo_track_status)
-	add_child(nouvelle_piste)
+	add_child(nouvelle_piste) 
 	remove_child(button)
 	add_child(button)
 
@@ -32,8 +31,22 @@ var playing := false
 var current_time := 0.0:
 	set(v):
 		current_time = v
-		counter.text = str(int(current_time) / 60) + ":" + str(int(current_time) % 60)
+		counter.text = format_time(current_time)
 		
+
+func format_time(t):
+	var min = int(current_time / 60)
+	var sec = (int(current_time) % 60)
+	var ms = int(fposmod(current_time,1) * 1000)
+	
+	
+	
+	return (
+		("0" + str(min) if min < 10 else str(min) ) + ":" +
+		("0" + str(sec)if sec < 10 else str(sec) ) + "::" +
+		("00" + str(ms) if ms < 10 else "0" + str(ms)if ms < 100 else str(ms))
+		
+	)
 
 func set_playback_start(time:float):
 	current_time = time

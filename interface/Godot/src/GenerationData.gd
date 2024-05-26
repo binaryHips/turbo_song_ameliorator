@@ -2,9 +2,9 @@ extends Node
 
 var tracks_manager:Node
 
-var algorithms = ["Markov", "dice"]
+var algorithms = ["Markov", "Dice", "Perc"]
 
-var instruments = ["Sine"]
+var instruments = ["Saw", "Guitar", "Perc kit"]
 
 
 #keys are ref of generation_blocks
@@ -38,7 +38,7 @@ func generate_all():
 		var generator = MusicGenerator.create(anaData, track.algorithm)
 		
 		for k in track.generation_calls.keys():
-			
+			k.set_generated(false)
 			var block_info = track.generation_calls[k]
 			generator.generate(
 				tracks_manager.px_to_time(block_info.start_px),
@@ -52,6 +52,6 @@ func generate_all():
 				notes[n].end_time += tracks_manager.px_to_time(block_info.start_px)
 			
 			track.notes.append_array(notes)
-
+			k.set_generated(true)
 func analyse_file(path:String):
 	anaData = MusicAnalysisData.create_from_file(path)

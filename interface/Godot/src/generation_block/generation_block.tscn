@@ -1,17 +1,33 @@
-[gd_scene load_steps=4 format=3 uid="uid://bh3cx8s2k1mow"]
+[gd_scene load_steps=6 format=3 uid="uid://bh3cx8s2k1mow"]
 
 [ext_resource type="Script" path="res://src/generation_block/generation_block.gd" id="1_few6j"]
 
 [sub_resource type="Gradient" id="Gradient_kdolw"]
 interpolation_mode = 2
-colors = PackedColorArray(0.278806, 0.306799, 0.402109, 1, 0.370707, 0.760479, 0.87131, 1)
+colors = PackedColorArray(0.728787, 0.934489, 0.96201, 1, 0.37803, 0.614729, 0.745977, 1)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_lpv6k"]
 gradient = SubResource("Gradient_kdolw")
-width = 16
-height = 16
+width = 32
+height = 32
 use_hdr = true
-fill_from = Vector2(0, 1)
+fill = 1
+fill_from = Vector2(0.358974, 0.619658)
+fill_to = Vector2(0.876068, 0.183761)
+
+[sub_resource type="Gradient" id="Gradient_i8lia"]
+interpolation_mode = 2
+offsets = PackedFloat32Array(0.827869, 1)
+colors = PackedColorArray(0.229897, 0.350607, 0.15199, 0, 0.316303, 0.82414, 0.293079, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_fbalx"]
+gradient = SubResource("Gradient_i8lia")
+width = 32
+height = 32
+use_hdr = true
+fill = 2
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.991453, 0.482906)
 
 [node name="generation_block" type="Control"]
 layout_mode = 3
@@ -36,4 +52,18 @@ offset_right = 0.0899811
 grow_horizontal = 2
 grow_vertical = 2
 texture = SubResource("GradientTexture2D_lpv6k")
+expand_mode = 1
+
+[node name="generated" type="TextureRect" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.01
+anchor_right = 0.99
+anchor_bottom = 1.0
+offset_left = -0.0900002
+offset_right = 0.0899811
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("GradientTexture2D_fbalx")
 expand_mode = 1

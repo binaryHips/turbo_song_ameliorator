@@ -1,9 +1,10 @@
 extends Node
 
 @export var sample_A:AudioStream
+@export var multisamples := false
+@export var multisamples_list: Array[AudioStream] = []
 
-
-@onready var playback
+@onready var playback:AudioStreamPlaybackPolyphonic
 
 func start():
 	$AudioStreamPlayer.play()
@@ -16,13 +17,23 @@ func set_volume(v):
 	$AudioStreamPlayer.volume_db = v
 
 func play_note(note:int, length:float, velocity:int):
+	var idx:int
+	if multisamples:
 	
-	var idx = playback.play_stream(
-		sample_A,
-		0,
-		lerp(-80, -6, 1.0/128 * velocity),
-		2**(note/12.0)
-	)
+			idx = playback.play_stream(
+			multisamples_list[note],
+			0,
+			lerp(-80, -6, 1.0/128 * velocity),
+		)
+	
+	else:
+		
+		idx = playback.play_stream(
+			sample_A,
+			0,
+			lerp(-80, -6, 1.0/128 * velocity),
+			2**(note/12.0)
+		)
 	
 	await get_tree().create_timer(length).timeout
 	
