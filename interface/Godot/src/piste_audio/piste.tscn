@@ -139,6 +139,7 @@ text = "[center]No audio loaded!
 (drop an ogg vorbis or mp3 file to start)"
 
 [node name="Anadata" type="ColorRect" parent="."]
+visible = false
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 1
 anchors_preset = -1

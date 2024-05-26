@@ -86,13 +86,14 @@ func on_files_dropped(files:PackedStringArray):
 	scale.make_scale(GenerationData.anaData)
 	scale.position.x = 0
 	AnaData.get_node("bpm").text = str(GenerationData.anaData.get_bpm())
-	$AudioStreamPlayer.volume_db = volume
-	$AudioStreamPlayer.play()
-	$AudioStreamPlayer.stop()
+	get_waveform_samples.call_deferred()
+	prepare.call_deferred()
 	
-	get_waveform_samples()
-	
-	
+func prepare(): #deadline smell
+	get_parent().play()
+	get_parent().stop()
+	get_parent().current_time = 0.0
+
 
 func load_ogg(path):
 	return AudioStreamOggVorbis.load_from_file(path)
@@ -126,6 +127,7 @@ func _on_v_slider_value_changed(value):
 
 func play(time):
 	$AudioStreamPlayer.play(time)
+
 
 func stop():
 	$AudioStreamPlayer.stop()

@@ -107,9 +107,9 @@ fn construct_notes_vec(list_percu : Vec<Vec<bool>>, dureet_frac : f64, decallage
             {
                 notes_vec.push(
                     (
-                    notes::Note{note : j.into(), octave : 5, velocity : midly::num::u7::new(100)},
+                    notes::Note{note : j.into(), octave : 5, velocity : midly::num::u7::new(127)},
                     instant,
-                    instant+dureet_frac/2.0));
+                    instant+dureet_frac));
             }
         }
         instant += dureet_frac;

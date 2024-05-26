@@ -19,7 +19,7 @@ func set_volume(v):
 func play_note(note:int, length:float, velocity:int):
 	var idx:int
 	if multisamples:
-	
+			if len(multisamples_list) <= note: return
 			idx = playback.play_stream(
 			multisamples_list[note],
 			0,

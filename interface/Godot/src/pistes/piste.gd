@@ -6,7 +6,7 @@ var algorithm:String = ""
 			
 var instrument:String = "Saw"
 
-var generation_calls = {}
+var generation_calls := {}
 var notes:Array[MusicNote] = []
 
 

@@ -142,7 +142,7 @@ impl MusicGenerator {
 
             "markov" => Box::new(MarkovGenerator::new(data.bind().data.clone())),
             "dice" => Box::new(MusicalDiceGenerator::new(data.bind().data.clone())),
-            "perc" => Box::new(PercGenerator::new(data.bind().data.clone())),
+            "perc" => Box::new(PercuGenerator::new(data.bind().data.clone())),
             _ => panic!("Not a valid algorithm name. Valid names are: 'markov', 'dice' and 'perc'"),
         };
 

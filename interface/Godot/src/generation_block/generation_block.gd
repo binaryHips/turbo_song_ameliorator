@@ -1,7 +1,8 @@
 extends Control
 
 
-
+var start_time:float
+var end_time:float
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
